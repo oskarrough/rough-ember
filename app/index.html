@@ -24,7 +24,9 @@
     <h3>Recent Posts</h3>
 
     {{#each model}}
-        {{#link-to 'post' this}}{{title}} <small>by {{author.name}}</small>{{/link-to}}<br>
+        <div>{{#link-to 'post' this}}{{title}} <small>by {{author.name}}</small>{{/link-to}}
+        <img {{bind-attr scr=image}} >
+        </div>
     {{/each}}
 
     <hr>
