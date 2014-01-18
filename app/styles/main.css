@@ -1,4 +1,7 @@
 /* Base */
+* {
+	box-sizing: border-box;
+}
 body {
 	margin: 2rem;
 }
@@ -33,23 +36,25 @@ nav a {
 	position: fixed;
 	top: 0;
 	left: 0;
+	/* indicate that you can click the overlay to close */
 	cursor: -webkit-zoom-out; cursor: -moz-zoom-out;
-	-webkit-transition: background-color 250ms;
-	-moz-transition: background-color 250ms;
-	transition: background-color 250ms;
+	border: 0 solid transparent;
+	-webkit-transition: all 250ms;
 }
 .Overlay.is-active {
-	background-color: rgba(50, 50, 150, 0.4);
+	background-color: rgba(50,50,75,0.7);
+	border: 1rem solid rgba(0,0,0,0.1);
 	-webkit-transition: background-color 150ms;
-	-moz-transition: background-color 150ms;
-	transition: background-color 150ms;
 }
 
 /* Modal inside an overlay */
 .Modal {
-	width: 300px;
+	position: relative;
+	top: 4rem;
+	width: 90%;
+	max-width: 500px;
 	margin: 1rem auto;
-	padding: 1rem;
+	padding: 2rem 1rem 1rem;
 	background-color: #fff;
 	cursor: initial;
 
@@ -57,16 +62,21 @@ nav a {
 	opacity: 0;
 	-webkit-transform: translate3d(0,-0.5rem,0) scale(0.99);
 	-webkit-transition: opacity 120ms, -webkit-transform 120ms ease-in-out;
-	-moz-transition: opacity 120ms, -webkit-transform 120ms ease-in-out;
-	transition: opacity 120ms, -webkit-transform 120ms ease-in-out;
+}
+@media (min-width: 30em) {
+	.Modal {
+		top: 17.5rem;
+	}
+}
+.Modal .Button--close {
+	position: absolute;
+	top: -0.6rem;
+	left: -0.6rem;
 }
 .Overlay.is-active .Modal {
 	/* active state */
 	opacity: 1;
 	-webkit-transform: translate3d(0,0,0) scale(1);
-/*	-webkit-transition: opacity 50ms, -webkit-transform 50ms ease-in-out;
-	-moz-transition: opacity 50ms, -webkit-transform 50ms ease-in-out;
-	transition: opacity 50ms, -webkit-transform 50ms ease-in-out;*/
 }
 
 /* Posts */

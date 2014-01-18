@@ -27,28 +27,31 @@ App.ApplicationController = Ember.Controller.extend({
 
 App.ApplicationRoute = Ember.Route.extend({
 	actions: {
-		openModal: function(modalName, model) {
+		openModal: function(templateName, modelName) {
+			console.log('ApplicationRoute openModal');
 			var self = this;
-			console.log('ApplicationRoute.actions.openModal');
-			this.controllerFor(modalName).set('model', model);
+			this.controllerFor(templateName).set('model', modelName);
 
-			$(document).keyup(function(e){
-			    if (e.which === 27) { // pressed 'esc'
-
-					// pass the action on to the route
-					return self.send('closeModal');
-			    }
+			// Close on 'esc'
+			$(document).on('keyup', function(event) {
+				if (event.which === 27) {
+					return self.closeModal();
+				}
 			});
 
-			return this.render(modalName, {
+			// Render into the right outlet
+			return this.render(templateName, {
 				into: 'application',
 				outlet: 'modal'
 			});
 
 		},
 		closeModal: function() {
-			console.log('ApplicationRoute.actions.closeModal');
+			console.log('ApplicationRoute closeModal');
 			var self = this;
+
+			// Stop listening to 'esc' because we just closed the modal
+			$(document).off('keyup');
 
 			// use one of: transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd
 			// events so the handler is only fired once in your browser
@@ -64,17 +67,39 @@ App.ApplicationRoute = Ember.Route.extend({
 					parentView: 'application'
 				});
 			});
-
-			// return this.disconnectOutlet({
-			// 	outlet: 'modal',
-			// 	parentView: 'application'
-			// });
 		}
 	}
+
+	// scroll to top on route change
+	// , currentPathChanged: function() {
+	// 	window.scrollTo(0, 0);
+	// }.observes('currentPath')
 });
 
+App.PostRoute = Ember.Route.extend({
+	model: function(params) {
+		//return this.store.find('post', params.id);
+		return App.posts.findBy('id', params.post_id)
+	},
 
+	// Render using the modal outlet of application
+	// (part duplicate of the openModel() in ApplicationRoute)
+	renderTemplate: function() {
+		var self = this;
 
+		// Close on 'esc' (also duplicate code)
+		$(document).on('keyup', function(event) {
+			if (event.which === 27) {
+				return self.send('closeModal');
+			}
+		});
+
+		this.render('post', {
+			into: 'application',
+			outlet: 'modal'
+		});
+	}
+});
 
 
 App.PostController = Ember.ObjectController.extend({
@@ -90,6 +115,7 @@ App.PostController = Ember.ObjectController.extend({
 	}
 });
 
+
 App.ModalController = Ember.ObjectController.extend({
 	actions: {
 		// Capture the close action from the modal
@@ -102,6 +128,7 @@ App.ModalController = Ember.ObjectController.extend({
 		}
 	}
 });
+
 
 App.ModalDialogComponent = Ember.Component.extend({
 	actions: {
@@ -123,6 +150,7 @@ App.ModalDialogComponent = Ember.Component.extend({
 		this.$('.Overlay').addClass('is-active');
 	}
 });
+
 
 // We can customize what happens on different routes like this
 App.IndexRoute = Ember.Route.extend({
@@ -157,30 +185,6 @@ App.PostsRoute = Ember.Route.extend({
 		//return this.store.find('posts');
 		return App.posts;
 	},
-});
-
-App.PostRoute = Ember.Route.extend({
-	model: function(params) {
-		//return this.store.find('post', params.id);
-		return App.posts.findBy('id', params.post_id)
-	},
-
-	// Render using the modal outlet of application
-	renderTemplate: function() {
-		this.render('post', {
-			into: 'application',
-			outlet: 'modal'
-		});
-	},
-
-	actions: {
-
-		// duplicate of the close action on ModalController
-		close: function() {
-			console.log('PostRoute.actions.close');
-
-		}
-	}
 });
 
 // Markdown helper
