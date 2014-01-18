@@ -1,5 +1,7 @@
 // Make an instance of Ember.Application and assign it to a global variable.
-App = Ember.Application.create({});
+App = Ember.Application.create({
+	LOG_TRANSITIONS: true
+});
 
 // Use sample data. THE DS.FixtureAdapater simulates a real json api.
 //App.ApplicationAdapter = DS.FixtureAdapter;
@@ -23,24 +25,80 @@ App.ApplicationController = Ember.Controller.extend({
 	siteTitle: "Oskar's project"
 });
 
-
 App.ApplicationRoute = Ember.Route.extend({
 	actions: {
 		openModal: function(modalName, model) {
-			// console.log('ApplicationRoute.actions.openModal');
+			var self = this;
+			console.log('ApplicationRoute.actions.openModal');
 			this.controllerFor(modalName).set('model', model);
+
+			$(document).keyup(function(e){
+			    if (e.which === 27) { // pressed 'esc'
+
+					// pass the action on to the route
+					return self.send('closeModal');
+			    }
+			});
+
 			return this.render(modalName, {
 				into: 'application',
 				outlet: 'modal'
 			});
+
 		},
 		closeModal: function() {
-			// console.log('ApplicationRoute.actions.closeModal');
+			console.log('ApplicationRoute.actions.closeModal');
+			var self = this;
 
-			return this.disconnectOutlet({
-				outlet: 'modal',
-				parentView: 'application'
+			// use one of: transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd
+			// events so the handler is only fired once in your browser
+			$('.Overlay').removeClass('is-active');
+			$('.Modal').one("transitionend", function(event) {
+				console.log('transition end');
+
+				// Closing the modal isn't enough. We also want to redirect back to /posts
+				self.transitionTo('posts');
+
+				return self.disconnectOutlet({
+					outlet: 'modal',
+					parentView: 'application'
+				});
 			});
+
+			// return this.disconnectOutlet({
+			// 	outlet: 'modal',
+			// 	parentView: 'application'
+			// });
+		}
+	}
+});
+
+
+
+
+
+App.PostController = Ember.ObjectController.extend({
+	actions: {
+		// Capture the close action from the modal
+		// and send up to the ApplicationRoute to handle
+		close: function() {
+			console.log('PostController.actions.close');
+
+			// pass the action on to ApplicationRoute
+			return this.send('closeModal');
+
+			// var self = this;
+
+			// // use one of: transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd
+			// // events so the handler is only fired once in your browser
+			// $('.Overlay').removeClass('is-active');
+			// $('.Modal').one("transitionend", function(event) {
+			// 	console.log('transition end');
+
+			// 	// pass the action on to the route
+			// 	return self.send('closeModal');
+			// });
+
 		}
 	}
 });
@@ -50,18 +108,10 @@ App.ModalController = Ember.ObjectController.extend({
 		// Capture the close action from the modal
 		// and send up to the ApplicationRoute to handle
 		close: function() {
-			// console.log('ModalController.actions.close');
-			var self = this;
+			console.log('ModalController.actions.close');
 
-			// use one of: transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd
-			// events so the handler is only fired once in your browser
-			$('.Overlay').removeClass('is-active');
-			$('.Modal').one("transitionend", function(event) {
-				// console.log('transition end');
-
-				// pass the action on to the route
-				return self.send('closeModal');
-			});
+			// pass the action on to ApplicationRoute
+			return this.send('closeModal');
 		}
 	}
 });
@@ -69,8 +119,7 @@ App.ModalController = Ember.ObjectController.extend({
 App.ModalDialogComponent = Ember.Component.extend({
 	actions: {
 		close: function() {
-			// console.log('ModalDialogComponent.actions.close');
-
+			console.log('ModalDialogComponent.actions.close');
 			// pass the action on the controller
 			return this.sendAction();
 		}
@@ -120,13 +169,30 @@ App.PostsRoute = Ember.Route.extend({
 	model: function() {
 		//return this.store.find('posts');
 		return App.posts;
-	}
+	},
 });
 
 App.PostRoute = Ember.Route.extend({
 	model: function(params) {
 		//return this.store.find('post', params.id);
 		return App.posts.findBy('id', params.post_id)
+	},
+
+	// Render using the modal outlet of application
+	renderTemplate: function() {
+		this.render('post', {
+			into: 'application',
+			outlet: 'modal'
+		});
+	},
+
+	actions: {
+
+		// duplicate of the close action on ModalController
+		close: function() {
+			console.log('PostRoute.actions.close');
+
+		}
 	}
 });
 

@@ -40,7 +40,7 @@ nav a {
 }
 .Overlay.is-active {
 	/*background-color: #fff;*/
-	background-color: rgba(0, 0, 0, 0.2);
+	background-color: rgba(50, 50, 50, 0.4);
 }
 
 /* Modal inside an overlay */

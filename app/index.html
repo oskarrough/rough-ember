@@ -10,7 +10,7 @@
 
 	<script type="text/x-handlebars" data-template-name="application">
 		<p class="Template">[application]</p>
-		<p><strong>{{siteTitle}}</strong></p>
+		<p>{{#link-to 'index'}}<strong>{{siteTitle}}</strong>{{/link-to}}</p>
 		<nav>
 			{{!-- include the navigation partial --}}
 			{{partial 'navigation'}}
@@ -18,13 +18,13 @@
 		<p class="Template">[application/outlet]</p>
 		{{outlet}}
 		<p class="Template">[application/modal]</p>
+
 		{{outlet modal}}
 	</script>
 
 	<!-- Partials are prefixed with an underscore -->
 	<script type="text/x-handlebars" data-template-name="_navigation">
 		<p class="Template">[_navigation]</p>
-		{{#link-to 'index'}}Index{{/link-to}}
 		{{#link-to 'posts'}}Posts{{/link-to}}
 		{{#link-to 'about'}}About{{/link-to}}
 	</script>
@@ -40,7 +40,6 @@
 		{{#each}}
 			<h1>{{title}}</h1>
 			<div class="Body">{{format-markdown body}}</div>
-			<button {{action 'openModal' 'modal' this}}>Open</button>
 		{{/each}}
 	</script>
 
@@ -50,7 +49,6 @@
 		{{#each model}}
 		<div {{bind-attr class=":List-item isFeatured:is-featured"}}>
 			{{#link-to 'post' this}}{{title}}{{/link-to}}
-			<button {{action 'openModal' 'modal' this}}>Open as modal</button>
 		</div>
 		{{/each}}
 
@@ -65,8 +63,11 @@
 
 	<script type="text/x-handlebars" data-template-name="post">
 		<p class="Template">[post]</p>
-		<h1>{{title}}</h1>
-		{{format-markdown body}}
+		{{#modal-dialog action="close"}}
+			<h1>{{title}}</h1>
+			{{format-markdown body}}
+			<button {{action "close"}}>Close</button>
+		{{/modal-dialog}}
 	</script>
 
 	<script type="text/x-handlebars" data-template-name="modal">
