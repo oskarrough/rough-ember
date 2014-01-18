@@ -34,13 +34,15 @@ nav a {
 	top: 0;
 	left: 0;
 	cursor: -webkit-zoom-out; cursor: -moz-zoom-out;
-	-webkit-transition: background-color 200ms;
-	-moz-transition: background-color 200ms;
-	transition: background-color 200ms;
+	-webkit-transition: background-color 250ms;
+	-moz-transition: background-color 250ms;
+	transition: background-color 250ms;
 }
 .Overlay.is-active {
-	/*background-color: #fff;*/
-	background-color: rgba(50, 50, 50, 0.4);
+	background-color: rgba(50, 50, 150, 0.4);
+	-webkit-transition: background-color 150ms;
+	-moz-transition: background-color 150ms;
+	transition: background-color 150ms;
 }
 
 /* Modal inside an overlay */
@@ -50,15 +52,21 @@ nav a {
 	padding: 1rem;
 	background-color: #fff;
 	cursor: initial;
-	opacity: 0.2;
+
+	/* initial 'inactive' state */
+	opacity: 0;
 	-webkit-transform: translate3d(0,-0.5rem,0) scale(0.99);
-	-webkit-transition: opacity 150ms, -webkit-transform 150ms ease-in-out;
-	-moz-transition: opacity 150ms, -webkit-transform 150ms ease-in-out;
-	transition: opacity 150ms, -webkit-transform 150ms ease-in-out;
+	-webkit-transition: opacity 120ms, -webkit-transform 120ms ease-in-out;
+	-moz-transition: opacity 120ms, -webkit-transform 120ms ease-in-out;
+	transition: opacity 120ms, -webkit-transform 120ms ease-in-out;
 }
 .Overlay.is-active .Modal {
+	/* active state */
 	opacity: 1;
 	-webkit-transform: translate3d(0,0,0) scale(1);
+/*	-webkit-transition: opacity 50ms, -webkit-transform 50ms ease-in-out;
+	-moz-transition: opacity 50ms, -webkit-transform 50ms ease-in-out;
+	transition: opacity 50ms, -webkit-transform 50ms ease-in-out;*/
 }
 
 /* Posts */

@@ -54,9 +54,9 @@ App.ApplicationRoute = Ember.Route.extend({
 			// events so the handler is only fired once in your browser
 			$('.Overlay').removeClass('is-active');
 			$('.Modal').one("transitionend", function(event) {
-				console.log('transition end');
 
-				// Closing the modal isn't enough. We also want to redirect back to /posts
+				// Before you remove the model,
+				// also redirect back to /posts
 				self.transitionTo('posts');
 
 				return self.disconnectOutlet({
@@ -86,19 +86,6 @@ App.PostController = Ember.ObjectController.extend({
 
 			// pass the action on to ApplicationRoute
 			return this.send('closeModal');
-
-			// var self = this;
-
-			// // use one of: transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd
-			// // events so the handler is only fired once in your browser
-			// $('.Overlay').removeClass('is-active');
-			// $('.Modal').one("transitionend", function(event) {
-			// 	console.log('transition end');
-
-			// 	// pass the action on to the route
-			// 	return self.send('closeModal');
-			// });
-
 		}
 	}
 });
