@@ -1,72 +1,99 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Nils Stelte</title>
-  <link rel="stylesheet" href="bower_components/normalize-css/normalize.css">
-  <link rel="stylesheet" href="styles/main.css">
+	<meta charset="utf-8">
+	<title>Beograd</title>
+	<link rel="stylesheet" href="bower_components/normalize-css/normalize.css">
+	<link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
 
-  <script type="text/x-handlebars">
-    <h1><a href="#">Nils Stelte</a></h1>
-    <nav>
-      {{#link-to 'posts'}}Posts{{/link-to}}<br>
-      {{#link-to 'about'}}About{{/link-to}}
-    </nav>
+	<script type="text/x-handlebars" data-template-name="application">
+		<p class="Template">[application]</p>
+		<p><strong>{{siteTitle}}</strong></p>
+		<nav>
+			{{!-- include the navigation partial --}}
+			{{partial 'navigation'}}
+		</nav>
+		<p class="Template">[application/outlet]</p>
+		{{outlet}}
+		<p class="Template">[application/modal]</p>
+		{{outlet modal}}
+	</script>
 
-    <hr>
+	<!-- Partials are prefixed with an underscore -->
+	<script type="text/x-handlebars" data-template-name="_navigation">
+		<p class="Template">[_navigation]</p>
+		{{#link-to 'index'}}Index{{/link-to}}
+		{{#link-to 'posts'}}Posts{{/link-to}}
+		{{#link-to 'about'}}About{{/link-to}}
+	</script>
 
-    {{outlet}}
-  </script>
+	<script type="text/x-handlebars" data-template-name="index">
+		<p class="Template">[index]</p>
+		<h1>{{title}}</h1>
+	</script>
 
-  <script type="text/x-handlebars" id="posts">
-    <h3>Recent Posts</h3>
+	<script type="text/x-handlebars" data-template-name="page">
+		<p class="Template">[page]</p>
 
-    {{#each model}}
-        <div>{{#link-to 'post' this}}{{title}} <small>by {{author.name}}</small>{{/link-to}}
-        <img {{bind-attr scr=image}} >
-        </div>
-    {{/each}}
+		{{#each}}
+			<h1>{{title}}</h1>
+			<div class="Body">{{format-markdown body}}</div>
+			<button {{action 'openModal' 'modal' this}}>Open</button>
+		{{/each}}
+	</script>
 
-    <hr>
+	<script type="text/x-handlebars" data-template-name="posts">
+		<p class="Template">[posts]</p>
 
-    {{outlet}}
-  </script>
+		{{#each model}}
+		<div {{bind-attr class=":List-item isFeatured:is-featured"}}>
+			{{#link-to 'post' this}}{{title}}{{/link-to}}
+			<button {{action 'openModal' 'modal' this}}>Open as modal</button>
+		</div>
+		{{/each}}
 
-  <script type="text/x-handlebars" id="posts/index">
-    <p>Please select a post</p>
-  </script>
+		<p class="Template">[posts/modal]</p>
+		{{outlet}}
+	</script>
 
-  <script type="text/x-handlebars" id="post">
-    <h1>{{title}}</h1>
-    <h2>by {{author.name}} <small class='muted'>({{format-date date}})</small></h2>
+	<script type="text/x-handlebars" data-template-name="posts/index">
+		<p class="Template">[posts/index]</p>
+		<p>Please select a post</p>
+	</script>
 
-    <hr>
+	<script type="text/x-handlebars" data-template-name="post">
+		<p class="Template">[post]</p>
+		<h1>{{title}}</h1>
+		{{format-markdown body}}
+	</script>
 
-    <div class='intro'>
-      {{format-markdown excerpt}}
-    </div>
+	<script type="text/x-handlebars" data-template-name="modal">
+		<p class="Template">[modal]</p>
 
-    <div class='below-the-fold'>
-      {{format-markdown body}}
-    </div>
-  </script>
+		{{#modal-dialog action="close"}}
+			<p>title: {{title}}</p>
+			<button {{action "close"}}>Close</button>
+		{{/modal-dialog}}
+	</script>
 
-  <script type="text/x-handlebars" id="about">
-    <h1>About</h1>
-      <p>This is the about page</p>
-  </script>
+	<script type="text/x-handlebars" id="components/modal-dialog">
+		<p class="Template">[components/modal-dialog]</p>
+		<div class="Overlay" {{action "close"}}>
+			<div class="Modal" {{action bubbles=false}}>
+				{{yield}}
+			</div>
+		</div>
+	</script>
 
-  <script src="bower_components/jquery/jquery.js"></script>
-  <script src="bower_components/handlebars/handlebars.js"></script>
-  <script src="bower_components/ember/ember.js"></script>
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/showdown/0.3.1/showdown.min.js"></script>
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.1.0/moment.min.js"></script>
+	<script src="bower_components/jquery/jquery.js"></script>
+	<script src="bower_components/handlebars/handlebars.js"></script>
+	<script src="bower_components/ember/ember.js"></script>
+	<script src="bower_components/showdown/src/showdown.js"></script>
 
-
-  <script src="scripts/data.json"></script>
-  <script src="scripts/main.js"></script>
+	<script src="scripts/main.js"></script>
+	<script src="scripts/data.js"></script>
 
 </body>
 </html>
