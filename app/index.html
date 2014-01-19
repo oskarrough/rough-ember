@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Beograd</title>
+	<title>Rough Ember</title>
 	<link rel="stylesheet" href="bower_components/normalize-css/normalize.css">
 	<link rel="stylesheet" href="styles/main.css">
 </head>
@@ -32,15 +32,13 @@
 	<script type="text/x-handlebars" data-template-name="index">
 		<p class="Template">[index]</p>
 		<h1>{{title}}</h1>
+		<div class="Body">{{format-markdown body}}</div>
 	</script>
 
 	<script type="text/x-handlebars" data-template-name="page">
 		<p class="Template">[page]</p>
-
-		{{#each}}
-			<h1>{{title}}</h1>
-			<div class="Body">{{format-markdown body}}</div>
-		{{/each}}
+		<h1>{{title}}</h1>
+		<div class="Body">{{format-markdown body}}</div>
 	</script>
 
 	<script type="text/x-handlebars" data-template-name="posts">
@@ -61,7 +59,7 @@
 		{{#modal-dialog action="close"}}
 			<h1>{{title}}</h1>
 			{{format-markdown body}}
-			<button class="Button Button--close" {{action close}}>Close</button>
+			<button class="Button Button--close" {{action close}}>&times;</button>
 		{{/modal-dialog}}
 	</script>
 
@@ -70,7 +68,7 @@
 
 		{{#modal-dialog action="close"}}
 			<p>title: {{title}}</p>
-			<button {{action "close"}}>Close</button>
+			<button {{action "close"}}>&times;</button>
 		{{/modal-dialog}}
 	</script>
 
@@ -86,6 +84,7 @@
 	<script src="bower_components/jquery/jquery.js"></script>
 	<script src="bower_components/handlebars/handlebars.js"></script>
 	<script src="bower_components/ember/ember.js"></script>
+	<script src="bower_components/ember-data/ember-data.js"></script>
 	<script src="bower_components/showdown/src/showdown.js"></script>
 
 	<script src="scripts/main.js"></script>

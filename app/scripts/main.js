@@ -1,24 +1,23 @@
-// Make an instance of Ember.Application and assign it to a global variable.
+// Make an instance of Ember.Application and assign it to a global variable
 App = Ember.Application.create({
 	LOG_TRANSITIONS: true
 });
 
-// Use sample data. THE DS.FixtureAdapater simulates a real json api.
-//App.ApplicationAdapter = DS.FixtureAdapter;
+// Define the 'Store' where our data will be
+// We use the FixtureAdapter to simulate a real JSON api using local JSON
+App.Store = DS.Store.extend({
+	adapter: DS.FixtureAdapter.create({
+		latency: 200
+	})
+});
 
 // Define our routes (the URLs)
 App.Router.map(function() {
 	this.route('about');
-
 	this.resource('posts', function() {
 		this.resource('post', { path: ':post_id'});
 	});
 });
-
-// Use HTML5 history for urls (e.g. no # in the URL)
-// App.Router.reopen({
-// 	location: 'history'
-// });
 
 // We can set global vars using this controller
 App.ApplicationController = Ember.Controller.extend({
@@ -69,17 +68,47 @@ App.ApplicationRoute = Ember.Route.extend({
 			});
 		}
 	}
+});
 
-	// scroll to top on route change
-	// , currentPathChanged: function() {
-	// 	window.scrollTo(0, 0);
-	// }.observes('currentPath')
+// We can customize what happens on different routes like this
+App.IndexRoute = Ember.Route.extend({
+	// setupController: function(controller) {
+	// 	// Set the IndexController's `title`
+	// 	// it will be available as {{title}} in the template
+	// 	controller.set('title', "My index page");
+	// },
+
+	model: function(params) {
+		return this.store.find('page', 1);
+	}
+
+	// Redirect to another route on load
+	// ,redirect: function() {
+	//   this.transitionTo('photos');
+	// }
+});
+
+App.AboutRoute = Ember.Route.extend({
+	model: function(params) {
+		return this.store.find('page', 2);
+	},
+
+	// Use the 'page' template instead of the default 'about'
+	renderTemplate: function() {
+		this.render('page');
+	}
+});
+
+App.PostsRoute = Ember.Route.extend({
+	model: function() {
+		// return App.posts;
+		return this.store.find('post');
+	},
 });
 
 App.PostRoute = Ember.Route.extend({
 	model: function(params) {
-		//return this.store.find('post', params.id);
-		return App.posts.findBy('id', params.post_id)
+		return this.store.find('post', params.post_id);
 	},
 
 	// Render using the modal outlet of application
@@ -101,20 +130,44 @@ App.PostRoute = Ember.Route.extend({
 	}
 });
 
+// Define our 'page' model
+App.Page = DS.Model.extend({
+	title: DS.attr('string'),
+	body: DS.attr('string'),
+});
+
+// Define our 'post' model
+App.Post = DS.Model.extend({
+	title: DS.attr('string'),
+	body: DS.attr('string'),
+	isFeatured: DS.attr('boolean')
+});
+
+
+
+
+
+
+
+
+
 
 App.PostController = Ember.ObjectController.extend({
 	actions: {
-		// Capture the close action from the modal
-		// and send up to the ApplicationRoute to handle
+		// Capture the close action from the modal and send up to the ApplicationRoute to handle
 		close: function() {
-			console.log('PostController.actions.close');
-
 			// pass the action on to ApplicationRoute
 			return this.send('closeModal');
 		}
 	}
 });
 
+
+// Markdown helper
+var showdown = new Showdown.converter();
+Ember.Handlebars.helper('format-markdown', function(input) {
+	return new Handlebars.SafeString(showdown.makeHtml(input));
+});
 
 App.ModalController = Ember.ObjectController.extend({
 	actions: {
@@ -128,7 +181,6 @@ App.ModalController = Ember.ObjectController.extend({
 		}
 	}
 });
-
 
 App.ModalDialogComponent = Ember.Component.extend({
 	actions: {
@@ -149,46 +201,4 @@ App.ModalDialogComponent = Ember.Component.extend({
 		// console.log('animateModalOpen')
 		this.$('.Overlay').addClass('is-active');
 	}
-});
-
-
-// We can customize what happens on different routes like this
-App.IndexRoute = Ember.Route.extend({
-	setupController: function(controller) {
-		// Set the IndexController's `title`
-		// it will be available as {{title}} in the template
-		controller.set('title', "My index page");
-	}
-
-	// Redirect to another route on load
-	// ,redirect: function() {
-	//   this.transitionTo('photos');
-	// }
-});
-
-// Customize a route like this
-App.AboutRoute = Ember.Route.extend({
-
-	// Use the 'page' template instead of the default 'about'
-	renderTemplate: function() {
-		this.render('page');
-	},
-
-	// Define the model for the template
-	model: function() {
-		return App.pages
-	}
-});
-
-App.PostsRoute = Ember.Route.extend({
-	model: function() {
-		//return this.store.find('posts');
-		return App.posts;
-	},
-});
-
-// Markdown helper
-var showdown = new Showdown.converter();
-Ember.Handlebars.helper('format-markdown', function(input) {
-	return new Handlebars.SafeString(showdown.makeHtml(input));
 });
