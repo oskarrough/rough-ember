@@ -3,8 +3,8 @@ App = Ember.Application.create({
 	LOG_TRANSITIONS: true
 });
 
-// Define the 'Store' where our data will be
-// We use the FixtureAdapter to simulate a real JSON api using local JSON
+// Define the 'Store' which is the ember-data way. The store will be using
+// the 'FixtureAdapter' that simulates a real JSON API but works with a local object
 App.Store = DS.Store.extend({
 	adapter: DS.FixtureAdapter.create({
 		latency: 200
@@ -24,8 +24,18 @@ App.ApplicationController = Ember.Controller.extend({
 	siteTitle: "Oskar's project"
 });
 
+App.LoadingRoute = Ember.Route.extend({});
+
 App.ApplicationRoute = Ember.Route.extend({
 	actions: {
+		loading: function(transition, originRoute) {
+			console.log('loading');
+			// displayLoadingSpinner();
+
+			// Return true to bubble this event to `FooRoute`
+			// or `ApplicationRoute`.
+			return true;
+		},
 		openModal: function(templateName, modelName) {
 			console.log('ApplicationRoute openModal');
 			var self = this;
@@ -57,10 +67,10 @@ App.ApplicationRoute = Ember.Route.extend({
 			$('.Overlay').removeClass('is-active');
 			$('.Modal').one("transitionend", function(event) {
 
-				// Before you remove the model,
-				// also redirect back to /posts
+				// Redirect back to /posts before…
 				self.transitionTo('posts');
 
+				// …we remove the model from the DOM
 				return self.disconnectOutlet({
 					outlet: 'modal',
 					parentView: 'application'
@@ -70,29 +80,16 @@ App.ApplicationRoute = Ember.Route.extend({
 	}
 });
 
-// We can customize what happens on different routes like this
 App.IndexRoute = Ember.Route.extend({
-	// setupController: function(controller) {
-	// 	// Set the IndexController's `title`
-	// 	// it will be available as {{title}} in the template
-	// 	controller.set('title', "My index page");
-	// },
-
 	model: function(params) {
 		return this.store.find('page', 1);
 	}
-
-	// Redirect to another route on load
-	// ,redirect: function() {
-	//   this.transitionTo('photos');
-	// }
 });
 
 App.AboutRoute = Ember.Route.extend({
 	model: function(params) {
 		return this.store.find('page', 2);
 	},
-
 	// Use the 'page' template instead of the default 'about'
 	renderTemplate: function() {
 		this.render('page');
@@ -101,9 +98,10 @@ App.AboutRoute = Ember.Route.extend({
 
 App.PostsRoute = Ember.Route.extend({
 	model: function() {
-		// return App.posts;
+		// return this.store.find('post', 1); // no network request
+		// return App.Post.find();
 		return this.store.find('post');
-	},
+	}
 });
 
 App.PostRoute = Ember.Route.extend({
@@ -111,7 +109,6 @@ App.PostRoute = Ember.Route.extend({
 		return this.store.find('post', params.post_id);
 	},
 
-	// Render using the modal outlet of application
 	// (part duplicate of the openModel() in ApplicationRoute)
 	renderTemplate: function() {
 		var self = this;
@@ -123,10 +120,21 @@ App.PostRoute = Ember.Route.extend({
 			}
 		});
 
+		// Render using the modal outlet of the application tpl
 		this.render('post', {
 			into: 'application',
 			outlet: 'modal'
 		});
+	}
+});
+
+App.PostController = Ember.ObjectController.extend({
+	actions: {
+		// Capture the close action from the modal
+		close: function() {
+			// and send it to the ApplicationRoute
+			return this.send('closeModal');
+		}
 	}
 });
 
@@ -144,44 +152,7 @@ App.Post = DS.Model.extend({
 });
 
 
-
-
-
-
-
-
-
-
-App.PostController = Ember.ObjectController.extend({
-	actions: {
-		// Capture the close action from the modal and send up to the ApplicationRoute to handle
-		close: function() {
-			// pass the action on to ApplicationRoute
-			return this.send('closeModal');
-		}
-	}
-});
-
-
-// Markdown helper
-var showdown = new Showdown.converter();
-Ember.Handlebars.helper('format-markdown', function(input) {
-	return new Handlebars.SafeString(showdown.makeHtml(input));
-});
-
-App.ModalController = Ember.ObjectController.extend({
-	actions: {
-		// Capture the close action from the modal
-		// and send up to the ApplicationRoute to handle
-		close: function() {
-			console.log('ModalController.actions.close');
-
-			// pass the action on to ApplicationRoute
-			return this.send('closeModal');
-		}
-	}
-});
-
+// Our Modal component
 App.ModalDialogComponent = Ember.Component.extend({
 	actions: {
 		close: function() {
@@ -190,15 +161,30 @@ App.ModalDialogComponent = Ember.Component.extend({
 			return this.sendAction();
 		}
 	},
+	// Hook for the 'rendered state'
 	didInsertElement: function() {
-		// console.log('didInsertElement')
-		// here your view is in rendered state
-		// so we schedule a function to run one step later, which we need for CSS transitions
+		// Run our function 'next' which we need for our CSS transition to work
+		// it needs it's class later
 		Ember.run.next(this, this.animateModalOpen);
 	},
+	// Hook for a 'later rendered state'
 	animateModalOpen: function() {
-		// here your child views is in the rendered state
-		// console.log('animateModalOpen')
 		this.$('.Overlay').addClass('is-active');
 	}
+});
+
+App.ModalController = Ember.ObjectController.extend({
+	actions: {
+		// Capture the close action from the modal
+		close: function() {
+			// and send it to the ApplicationRoute
+			return this.send('closeModal');
+		}
+	}
+});
+
+// Helper to convert Markdown to HTML
+var showdown = new Showdown.converter();
+Ember.Handlebars.helper('format-markdown', function(input) {
+	return new Handlebars.SafeString(showdown.makeHtml(input));
 });

@@ -44,9 +44,9 @@
 	<script type="text/x-handlebars" data-template-name="posts">
 		<p class="Template">[posts]</p>
 
-		{{#each model}}
+		{{#each}}
 		<div {{bind-attr class=":List-item isFeatured:is-featured"}}>
-			{{#link-to 'post' this}}{{title}}{{/link-to}}
+			- {{#link-to 'post' this}}{{title}}{{/link-to}}
 		</div>
 		{{/each}}
 
@@ -80,6 +80,11 @@
 			</div>
 		</div>
 	</script>
+
+	<script type="text/x-handlebars" data-template-name="loading">
+		<p>Loading…</p>
+	</script>
+
 
 	<script src="bower_components/jquery/jquery.js"></script>
 	<script src="bower_components/handlebars/handlebars.js"></script>
