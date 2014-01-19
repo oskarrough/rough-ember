@@ -2,6 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
+	<meta name='viewport' content='width=device-width'>
 	<title>Rough Ember</title>
 	<link rel="stylesheet" href="bower_components/normalize-css/normalize.css">
 	<link rel="stylesheet" href="styles/main.css">
@@ -9,10 +10,11 @@
 <body>
 
 	<script type="text/x-handlebars" data-template-name="application">
-		<p class="Template" {{action 'toggleNavigation'}}>[application]</p>
+		<p class="Template">[application]</p>
 
 		<p>{{#link-to 'index'}}<strong>{{unbound siteTitle}}</strong>{{/link-to}}</p>
 
+		<p><button {{action 'toggleNavigation'}}>Toggle navigation</button></p>
 		<nav {{bind-attr class=":Default showNavigation:is-active"}}>
 			{{!-- include the navigation partial --}}
 			{{partial 'navigation'}}

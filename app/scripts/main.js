@@ -7,6 +7,7 @@ App = Ember.Application.create({
 // the 'FixtureAdapter' that simulates a real JSON API but works with a local object
 App.Store = DS.Store.extend({
 	adapter: DS.FixtureAdapter.create({
+		simulateRemoteResponse: true,
 		latency: 200
 	})
 });
@@ -18,8 +19,6 @@ App.Router.map(function() {
 		this.resource('post', { path: ':post_id'});
 	});
 });
-
-App.LoadingRoute = Ember.Route.extend({});
 
 App.ApplicationRoute = Ember.Route.extend({
 	actions: {
@@ -78,6 +77,11 @@ App.ApplicationRoute = Ember.Route.extend({
 App.IndexRoute = Ember.Route.extend({
 	model: function(params) {
 		return this.store.find('page', 1);
+	},
+	afterModel: function() {
+		var pageTitle = this.modelFor('index').get('title');
+		var siteTitle = this.controllerFor('Application').get('siteTitle');
+		document.title = pageTitle + ' - ' + siteTitle;
 	}
 });
 
@@ -88,6 +92,11 @@ App.AboutRoute = Ember.Route.extend({
 	// Use the 'page' template instead of the default 'about'
 	renderTemplate: function() {
 		this.render('page');
+	},
+	afterModel: function() {
+		var pageTitle = this.modelFor('about').get('title');
+		var siteTitle = this.controllerFor('Application').get('siteTitle');
+		document.title = pageTitle + ' - ' + siteTitle;
 	}
 });
 
@@ -96,6 +105,11 @@ App.PostsRoute = Ember.Route.extend({
 		// return this.store.find('post', 1); // no network request
 		// return App.Post.find();
 		return this.store.find('post');
+	},
+	afterModel: function() {
+		var pageTitle = 'Posts';
+		var siteTitle = this.controllerFor('Application').get('siteTitle');
+		document.title = pageTitle + ' - ' + siteTitle;
 	}
 });
 
@@ -120,6 +134,11 @@ App.PostRoute = Ember.Route.extend({
 			into: 'application',
 			outlet: 'modal'
 		});
+	},
+	afterModel: function() {
+		var pageTitle = this.modelFor('post').get('title');
+		var siteTitle = this.controllerFor('Application').get('siteTitle');
+		document.title = pageTitle + ' - ' + siteTitle;
 	}
 });
 
@@ -136,7 +155,6 @@ App.ApplicationController = Ember.Controller.extend({
 });
 
 App.PostsController = Ember.ArrayController.extend({
-
 	// Default view mode
 	viewMode: 'grid',
 

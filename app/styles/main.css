@@ -9,6 +9,7 @@ h1,h2,h3,p,ul {
 	margin: 0 0 1rem;
 }
 
+
 /* Navigation */
 a,
 a:visited {
@@ -35,6 +36,7 @@ nav.is-active {
 	color: #888;
 }
 
+
 /* Overlay */
 .Overlay {
 	height: 100%;
@@ -52,6 +54,7 @@ nav.is-active {
 	border: 1rem solid rgba(0,0,0,0.1);
 	-webkit-transition: background-color 150ms;
 }
+
 
 /* Modal inside an overlay */
 .Modal {
@@ -86,14 +89,8 @@ nav.is-active {
 	-webkit-transform: translate3d(0,0,0) scale(1);
 }
 
-/* Posts */
-.is-featured {
-	font-weight: bold;
-}
 
-
-
-
+/* Buttons */
 button {
 	background-color: #fff;
 	border: 2px solid;
@@ -108,8 +105,12 @@ button {
 	font-size: 1rem;
 	padding: 0.15em 0.4em 0.25em 0.39em;
 }
+button[disabled] {
+	color: #ccc;
+}
 
 
+/* Posts */
 .Posts--grid {
 	overflow: auto;
 	padding-left: 0;
@@ -126,4 +127,7 @@ button {
 .Posts--grid > a {
 	display: block;
 	height: 100%;
+}
+.is-featured {
+	font-weight: bold;
 }

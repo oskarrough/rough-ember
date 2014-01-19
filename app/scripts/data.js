@@ -1,5 +1,3 @@
-// Define our data.
-// This could also be delivered from an external server/api or from a .json file somewhere
 App.Page.FIXTURES = [
 	{
 		id: 1,
@@ -17,7 +15,7 @@ App.Post.FIXTURES = [
 	{
 		id: 1,
 		title: "One post",
-		body: "One post"
+		body: "Yes this is my first post."
 	},
 	{
 		id: 2,
