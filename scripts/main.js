@@ -78,8 +78,8 @@ App.IndexRoute = Ember.Route.extend({
 	model: function(params) {
 		return this.store.find('page', 1);
 	},
-	afterModel: function() {
-		var pageTitle = this.modelFor('index').get('title');
+	afterModel: function(model) {
+		var pageTitle = model.get('title');
 		var siteTitle = this.controllerFor('Application').get('siteTitle');
 		document.title = pageTitle + ' - ' + siteTitle;
 	}
@@ -93,8 +93,8 @@ App.AboutRoute = Ember.Route.extend({
 	renderTemplate: function() {
 		this.render('page');
 	},
-	afterModel: function() {
-		var pageTitle = this.modelFor('about').get('title');
+	afterModel: function(model) {
+		var pageTitle = model.get('title');
 		var siteTitle = this.controllerFor('Application').get('siteTitle');
 		document.title = pageTitle + ' - ' + siteTitle;
 	}
@@ -135,8 +135,8 @@ App.PostRoute = Ember.Route.extend({
 			outlet: 'modal'
 		});
 	},
-	afterModel: function() {
-		var pageTitle = this.modelFor('post').get('title');
+	afterModel: function(model) {
+		var pageTitle = model.get('title');
 		var siteTitle = this.controllerFor('Application').get('siteTitle');
 		document.title = pageTitle + ' - ' + siteTitle;
 	}
