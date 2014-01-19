@@ -21,6 +21,12 @@ a:hover {}
 nav a {
 	margin-right: 0.5rem;
 }
+nav {
+	display: none;
+}
+nav.is-active {
+	display: block;
+}
 
 /* For debugging */
 .Template {
@@ -38,7 +44,7 @@ nav a {
 	left: 0;
 	/* indicate that you can click the overlay to close */
 	cursor: -webkit-zoom-out; cursor: -moz-zoom-out;
-	border: 0 solid transparent;
+	border: 1rem solid transparent;
 	-webkit-transition: all 250ms;
 }
 .Overlay.is-active {
@@ -101,4 +107,23 @@ button {
 .Button--close {
 	font-size: 1rem;
 	padding: 0.15em 0.4em 0.25em 0.39em;
+}
+
+
+.Posts--grid {
+	overflow: auto;
+	padding-left: 0;
+	list-style: none;
+}
+.Posts--grid > .Post {
+	float: left;
+	width: 10em;
+	min-height: 3em;
+	margin: 0 1rem 1rem 0;
+	border: 1px solid;
+	text-align: center;
+}
+.Posts--grid > a {
+	display: block;
+	height: 100%;
 }

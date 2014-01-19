@@ -9,16 +9,19 @@
 <body>
 
 	<script type="text/x-handlebars" data-template-name="application">
-		<p class="Template">[application]</p>
-		<p>{{#link-to 'index'}}<strong>{{siteTitle}}</strong>{{/link-to}}</p>
-		<nav>
+		<p class="Template" {{action 'toggleNavigation'}}>[application]</p>
+
+		<p>{{#link-to 'index'}}<strong>{{unbound siteTitle}}</strong>{{/link-to}}</p>
+
+		<nav {{bind-attr class=":Default showNavigation:is-active"}}>
 			{{!-- include the navigation partial --}}
 			{{partial 'navigation'}}
 		</nav>
+
 		<p class="Template">[application/outlet]</p>
 		{{outlet}}
-		<p class="Template">[application/modal]</p>
 
+		<p class="Template">[application/modal]</p>
 		{{outlet modal}}
 	</script>
 
@@ -37,18 +40,21 @@
 
 	<script type="text/x-handlebars" data-template-name="page">
 		<p class="Template">[page]</p>
-		<h1>{{title}}</h1>
-		<div class="Body">{{format-markdown body}}</div>
+		<h1>{{unbound title}}</h1>
+		<div class="Body">{{unbound format-markdown body}}</div>
 	</script>
 
 	<script type="text/x-handlebars" data-template-name="posts">
 		<p class="Template">[posts]</p>
+		<p><button {{action 'viewMode'}}>Toggle view mode</button></p>
 
+		<ul {{bind-attr class=":Posts viewingGrid:Posts--grid viewingList:Posts--list"}}>
 		{{#each}}
-		<div {{bind-attr class=":List-item isFeatured:is-featured"}}>
-			- {{#link-to 'post' this}}{{title}}{{/link-to}}
-		</div>
+		<li {{bind-attr class=":Post isFeatured:is-featured"}}>
+			{{#link-to 'post' this}}{{unbound title}}{{/link-to}}
+		</li>
 		{{/each}}
+		</ul>
 
 		<p class="Template">[posts/modal]</p>
 		{{outlet}}
@@ -57,8 +63,8 @@
 	<script type="text/x-handlebars" data-template-name="post">
 		<p class="Template">[post]</p>
 		{{#modal-dialog action="close"}}
-			<h1>{{title}}</h1>
-			{{format-markdown body}}
+			<h1>{{unbound title}}</h1>
+			{{unbound format-markdown body}}
 			<button class="Button Button--close" {{action close}}>&times;</button>
 		{{/modal-dialog}}
 	</script>
@@ -67,7 +73,7 @@
 		<p class="Template">[modal]</p>
 
 		{{#modal-dialog action="close"}}
-			<p>title: {{title}}</p>
+			<p>title: {{unbound title}}</p>
 			<button {{action "close"}}>&times;</button>
 		{{/modal-dialog}}
 	</script>

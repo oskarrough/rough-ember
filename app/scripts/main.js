@@ -19,11 +19,6 @@ App.Router.map(function() {
 	});
 });
 
-// We can set global vars using this controller
-App.ApplicationController = Ember.Controller.extend({
-	siteTitle: "Oskar's project"
-});
-
 App.LoadingRoute = Ember.Route.extend({});
 
 App.ApplicationRoute = Ember.Route.extend({
@@ -125,6 +120,42 @@ App.PostRoute = Ember.Route.extend({
 			into: 'application',
 			outlet: 'modal'
 		});
+	}
+});
+
+// We can set global vars using this controller
+App.ApplicationController = Ember.Controller.extend({
+	siteTitle: "Oskar's project",
+	showNavigation: true,
+	actions: {
+		toggleNavigation: function(){
+			console.log('hej');
+			this.toggleProperty('showNavigation');
+		}
+	}
+});
+
+App.PostsController = Ember.ArrayController.extend({
+
+	// Default view mode
+	viewMode: 'grid',
+
+	// true if we're viewing the grid mode
+	viewingGrid: Ember.computed.equal('viewMode', 'grid'),
+
+	// true if we're viewing the list mode
+	viewingList: Ember.computed.equal('viewMode', 'list'),
+
+	actions: {
+
+		// Toggle view mode
+		viewMode: function() {
+			if (this.get('viewingGrid')) {
+				this.set('viewMode', 'list');
+			} else {
+				this.set('viewMode', 'grid');
+			}
+		}
 	}
 });
 
