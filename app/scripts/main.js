@@ -147,14 +147,11 @@ App.PostsController = Ember.ArrayController.extend({
 	viewingList: Ember.computed.equal('viewMode', 'list'),
 
 	actions: {
-
-		// Toggle view mode
-		viewMode: function() {
-			if (this.get('viewingGrid')) {
-				this.set('viewMode', 'list');
-			} else {
-				this.set('viewMode', 'grid');
-			}
+		viewAsGrid: function() {
+			this.set('viewMode', 'grid');
+		},
+		viewAsList: function() {
+			this.set('viewMode', 'list');
 		}
 	}
 });

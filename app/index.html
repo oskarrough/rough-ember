@@ -46,7 +46,15 @@
 
 	<script type="text/x-handlebars" data-template-name="posts">
 		<p class="Template">[posts]</p>
-		<p><button {{action 'viewMode'}}>Toggle view mode</button></p>
+		<p><button class='Button'
+		         {{action viewAsGrid}}
+		         {{bindAttr disabled="viewingGrid"}}>View as a grid</button>
+
+		 <button class='Button'
+		         {{action viewAsList}}
+		         {{bindAttr disabled="viewingList"}}>View as a list</button></p>
+
+
 
 		<ul {{bind-attr class=":Posts viewingGrid:Posts--grid viewingList:Posts--list"}}>
 		{{#each}}
