@@ -1,0 +1,22 @@
+<div class="Area">
+	<p class="Template">[application]</p>
+
+	<p>{{#link-to 'index'}}<strong>{{unbound siteTitle}}</strong>{{/link-to}}</p>
+
+	<p><button {{action 'toggleNavigation'}}>Toggle navigation</button></p>
+	<nav {{bind-attr class=":Default showNavigation:is-active"}}>
+		{{!-- include the navigation partial --}}
+		{{partial 'navigation'}}
+	</nav>
+
+	<div class="Area">
+		<p class="Template">[application/outlet]</p>
+		{{outlet}}
+	</div>
+
+	<div class="Area">
+		<p class="Template">[application/modal]</p>
+		{{outlet modal}}
+		</div>
+	</div>
+</div>

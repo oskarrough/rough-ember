@@ -1,0 +1,8 @@
+<p class="Template">[post]</p>
+<div class="modalshouldbehere">
+{{#modal-dialog action="close"}}
+	<h1>{{unbound title}}</h1>
+	{{unbound format-markdown body}}
+	<button class="Button Button--close" {{action close}}>&times;</button>
+{{/modal-dialog}}
+</div>

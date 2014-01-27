@@ -4,6 +4,7 @@
 }
 body {
 	margin: 2rem;
+	// background-color: green;
 }
 h1,h2,h3,p,ul {
 	margin: 0 0 1rem;
@@ -18,15 +19,14 @@ a:visited {
 a.active {
 	color: green;
 }
-a:hover {}
-nav a {
-	margin-right: 0.5rem;
-}
 nav {
 	display: none;
-}
-nav.is-active {
-	display: block;
+	a {
+	margin-right: 0.5rem;
+	}
+	&.is-active {
+		display: block;
+	}
 }
 
 /* For debugging */
@@ -34,6 +34,15 @@ nav.is-active {
 	margin: 2rem 0 0.5rem;
 	font-family: monospace;
 	color: #888;
+}
+.Area {
+	border: 1px solid;
+	margin: 1em;
+	padding: 1em;
+}
+.modalshouldbehere {
+	@extend .Area;
+	border-color: red;
 }
 
 
@@ -47,12 +56,12 @@ nav.is-active {
 	/* indicate that you can click the overlay to close */
 	cursor: -webkit-zoom-out; cursor: -moz-zoom-out;
 	border: 1rem solid transparent;
-	-webkit-transition: all 250ms;
+	transition: all 250ms;
 }
 .Overlay.is-active {
 	background-color: rgba(50,50,75,0.7);
 	border: 1rem solid rgba(0,0,0,0.1);
-	-webkit-transition: background-color 150ms;
+	transition: background-color 150ms;
 }
 
 
@@ -70,8 +79,8 @@ nav.is-active {
 
 	/* initial 'inactive' state */
 	opacity: 0;
-	-webkit-transform: translate3d(0,-0.5rem,0) scale(0.99);
-	-webkit-transition: opacity 120ms, -webkit-transform 120ms ease-in-out;
+	transform: translate3d(0,-0.5rem,0) scale(0.99);
+	transition: opacity 120ms, transform 120ms ease-in-out;
 }
 @media (min-width: 30em) {
 	.Modal {
@@ -86,7 +95,7 @@ nav.is-active {
 .Overlay.is-active .Modal {
 	/* active state */
 	opacity: 1;
-	-webkit-transform: translate3d(0,0,0) scale(1);
+	transform: translate3d(0,0,0) scale(1);
 }
 
 
@@ -115,18 +124,18 @@ button[disabled] {
 	overflow: auto;
 	padding-left: 0;
 	list-style: none;
-}
-.Posts--grid > .Post {
-	float: left;
-	width: 10em;
-	min-height: 3em;
-	margin: 0 1rem 1rem 0;
-	border: 1px solid;
-	text-align: center;
-}
-.Posts--grid > a {
-	display: block;
-	height: 100%;
+	& > .Post {
+		float: left;
+		width: 10em;
+		margin: 0 1rem 1rem 0;
+		border: 1px solid;
+		text-align: center;
+	}
+	.Post > a {
+		display: block;
+		height: 100%;
+		min-height: 3em;
+	}
 }
 .is-featured {
 	font-weight: bold;
