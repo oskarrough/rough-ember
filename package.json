@@ -1,0 +1,29 @@
+{
+  "name": "rough",
+  "version": "0.1.0",
+  "dependencies": {
+    "gulp-sass": "~0.6.0"
+  },
+  "devDependencies": {
+    "gulp": "~3.5.0",
+    "gulp-minify-css": "~0.2.0",
+    "gulp-load-plugins": "~0.2.0",
+    "gulp-jshint": "~1.3.4",
+    "jshint-stylish": "~0.1.5",
+    "gulp-autoprefixer": "0.0.4",
+    "gulp-clean": "~0.2.4",
+    "gulp-rename": "~0.2.2",
+    "gulp-uglify": "~0.2.0",
+    "gulp-notify": "~0.3.5-0",
+    "gulp-watch": "~0.5.0",
+    "gulp-livereload": "~0.2.0",
+    "gulp-ruby-sass": "~0.2.0",
+    "tiny-lr": "0.0.5",
+    "connect-livereload": "~0.3.2",
+    "open": "0.0.4",
+    "connect": "~2.12.0",
+    "gulp-concat": "~2.1.7",
+    "gulp-handlebars": "~1.0.0",
+    "gulp-ember-handlebars": "~0.3.1"
+  }
+}
