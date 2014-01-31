@@ -53,9 +53,13 @@ gulp.task('scripts', function() {
 });
 
 // Copy our components to where our server is running
-gulp.task('components', function(){
+gulp.task('copy', function(){
 	gulp.src('./app/bower_components/**')
-		.pipe(gulp.dest(config.dist + '/bower_components'));
+		.pipe(gulp.dest(config.dist + '/bower_components'))
+		.pipe(plugins.livereload(lr));
+	gulp.src('./app/data/**')
+		.pipe(gulp.dest(config.dist + '/data'))
+		.pipe(plugins.livereload(lr));
 });
 
 // Minify and copy styles
@@ -78,14 +82,20 @@ gulp.task('watch', function(){
 	gulp.watch('app/*.html', function(){
 		gulp.start('templates');
 	});
-	gulp.watch('app/templates/**/*.hbs', function(){
+	gulp.watch('app/templates/**/*', function(){
 		gulp.start('ember');
 	});
-	gulp.watch('app/scripts/**.js', function(){
+	gulp.watch('app/scripts/**/*', function(){
 		gulp.start('scripts');
 	});
-	gulp.watch('app/styles/**', function(){
+	gulp.watch('app/styles/**/*', function(){
 		gulp.start('styles');
+	});
+	gulp.watch('app/data/**/*', function(){
+		gulp.start('copy');
+	});
+	gulp.watch('app/bower_components/**/*', function(){
+		gulp.start('copy');
 	});
 });
 
@@ -98,7 +108,7 @@ gulp.task('clean', function() {
 
 // Compile everything, start a local server and watch for changes to compile
 gulp.task('default', ['watch'], function(){
-	gulp.start('components', 'livereload', 'compile');
+	gulp.start('copy', 'livereload', 'compile');
 });
 
 gulp.task('livereload', function(){
