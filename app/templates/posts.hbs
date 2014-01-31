@@ -1,21 +1,26 @@
-<p class="Template">[posts]</p>
-<p><button class='Button'
-         {{action viewAsGrid}}
-         {{bind-attr disabled="viewingGrid"}}>View as a grid</button>
+<div class="Area">
+	<p class="Area-name">[posts]</p>
 
- <button class='Button'
-         {{action viewAsList}}
-         {{bind-attr disabled="viewingList"}}>View as a list</button></p>
+	<p><button class='Button'
+	         {{action viewAsGrid}}
+	         {{bind-attr disabled="viewingGrid"}}>View as a grid</button>
 
+	 <button class='Button'
+	         {{action viewAsList}}
+	         {{bind-attr disabled="viewingList"}}>View as a list</button></p>
 
+	<ul {{bind-attr class=":Posts viewingGrid:Posts--grid viewingList:Posts--list"}}>
+		{{#each}}
+			<li {{bind-attr class=":Post isFeatured:is-featured"}}>
+				{{#link-to 'post' this}}{{unbound title}}{{/link-to}}
+			</li>
+		{{/each}}
+	</ul>
 
-<ul {{bind-attr class=":Posts viewingGrid:Posts--grid viewingList:Posts--list"}}>
-{{#each}}
-<li {{bind-attr class=":Post isFeatured:is-featured"}}>
-	{{#link-to 'post' this}}{{unbound title}}{{/link-to}}
-</li>
-{{/each}}
-</ul>
+	<div class="Area Area--outlet">
+		<p class="Area-name">[outlet of posts]</p>
+		{{outlet}}
+		</div>
+	</div>
 
-<p class="Template">[posts/modal]</p>
-{{outlet}}
+</div>

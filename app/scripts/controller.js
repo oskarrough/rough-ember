@@ -1,10 +1,8 @@
-// We can set global vars using this controller
 App.ApplicationController = Ember.Controller.extend({
-	siteTitle: "Oskar's project",
+	siteTitle: 'Rough Ember',
 	showNavigation: true,
 	actions: {
 		toggleNavigation: function(){
-			console.log('hej');
 			this.toggleProperty('showNavigation');
 		}
 	}
@@ -12,11 +10,10 @@ App.ApplicationController = Ember.Controller.extend({
 
 App.PostsController = Ember.ArrayController.extend({
 	// Default view mode
-	viewMode: 'grid',
+	viewMode: 'list',
 
 	// true if we're viewing the grid mode
 	viewingGrid: Ember.computed.equal('viewMode', 'grid'),
-
 	// true if we're viewing the list mode
 	viewingList: Ember.computed.equal('viewMode', 'list'),
 
@@ -32,9 +29,10 @@ App.PostsController = Ember.ArrayController.extend({
 
 App.PostController = Ember.ObjectController.extend({
 	actions: {
-		// Capture the close action from the modal
+		// Capture the close action from the controller's template
 		close: function() {
 			// and send it to the ApplicationRoute
+			console.log('close?!');
 			return this.send('closeModal');
 		}
 	}
@@ -42,7 +40,7 @@ App.PostController = Ember.ObjectController.extend({
 
 App.ModalController = Ember.ObjectController.extend({
 	actions: {
-		// Capture the close action from the modal
+		// Capture the close action from the controller's template
 		close: function() {
 			// and send it to the ApplicationRoute
 			return this.send('closeModal');

@@ -16,8 +16,9 @@ App.ApplicationRoute = Ember.Route.extend({
 			// or `ApplicationRoute`.
 			return true;
 		},
+
 		openModal: function(templateName, modelName) {
-			console.log('ApplicationRoute openModal');
+			console.log('ApplicationRoute openModal' + templateName);
 			var self = this;
 			this.controllerFor(templateName).set('model', modelName);
 
@@ -28,13 +29,13 @@ App.ApplicationRoute = Ember.Route.extend({
 				}
 			});
 
-			// Render into the right outlet
-			return this.render(templateName, {
-				into: 'application',
-				outlet: 'modal'
-			});
-
+			// // Render into the right outlet
+			// return this.render(templateName, {
+			// 	into: 'application',
+			// 	outlet: 'modal'
+			// });
 		},
+
 		closeModal: function() {
 			console.log('ApplicationRoute closeModal');
 			var self = this;
@@ -45,7 +46,8 @@ App.ApplicationRoute = Ember.Route.extend({
 			// use one of: transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd
 			// events so the handler is only fired once in your browser
 			$('.Overlay').removeClass('is-active');
-			$('.Modal').one("transitionend", function(event) {
+
+			// $('.Modal').one('transitionend', function(event) {
 
 				// Redirect back to /posts before…
 				self.transitionTo('posts');
@@ -55,16 +57,18 @@ App.ApplicationRoute = Ember.Route.extend({
 					outlet: 'modal',
 					parentView: 'application'
 				});
-			});
+			// });
 		}
 	}
 });
 
 App.IndexRoute = Ember.Route.extend({
+	// Render using the first page
 	model: function(params) {
 		return this.store.find('page', 1);
 	},
 	afterModel: function(model) {
+		// Change the meta title
 		var pageTitle = model.get('title');
 		var siteTitle = this.controllerFor('Application').get('siteTitle');
 		document.title = pageTitle + ' - ' + siteTitle;
@@ -88,8 +92,6 @@ App.AboutRoute = Ember.Route.extend({
 
 App.PostsRoute = Ember.Route.extend({
 	model: function() {
-		// return this.store.find('post', 1); // no network request
-		// return App.Post.find();
 		return this.store.find('post');
 	},
 	afterModel: function() {
@@ -103,19 +105,20 @@ App.PostRoute = Ember.Route.extend({
 	model: function(params) {
 		return this.store.find('post', params.post_id);
 	},
-
 	// (part duplicate of the openModel() in ApplicationRoute)
 	renderTemplate: function() {
 		var self = this;
 
-		// Close on 'esc' (also duplicate code)
-		$(document).on('keyup', function(event) {
-			if (event.which === 27) {
-				return self.send('closeModal');
-			}
-		});
+		console.log('post render template');
 
-		// Render using the modal outlet of the application tpl
+		// // Close on 'esc' (also duplicate code)
+		// $(document).on('keyup', function(event) {
+		// 	if (event.which === 27) {
+		// 		return self.send('closeModal');
+		// 	}
+		// });
+
+		// Render using the post template into the modal of the application tpl
 		this.render('post', {
 			into: 'application',
 			outlet: 'modal'
