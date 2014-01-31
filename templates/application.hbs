@@ -1,0 +1,26 @@
+<div class="Area">
+	<p class="Area-name">[application]</p>
+
+	<p>{{#link-to 'index'}}<strong>{{unbound siteTitle}}</strong>{{/link-to}}</p>
+
+	<p><button {{action 'toggleNavigation'}}>Toggle navigation</button></p>
+	<nav {{bind-attr class=":Default showNavigation:is-active"}}>
+		{{partial 'navigation'}}
+	</nav>
+
+	<div class="Area Area--outlet">
+		<p class="Area-name">[outlet of application]</p>
+		{{outlet}}
+	</div>
+
+	<div class="Area Area--outlet">
+		<p class="Area-name">[outlet modal of application]</p>
+
+		<div class="Overlay" {{action 'closeModal'}}>
+			<div class="Modal" {{action 'nothing' bubbles=false}}>
+				{{outlet modal}}
+			</div>
+		</div>
+
+	</div>
+</div>

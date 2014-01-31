@@ -5,7 +5,7 @@
     "./ember.js"
   ],
   "dependencies": {
-    "jquery": ">= 1.7",
+    "jquery": ">= 1.7 < 2.1",
     "handlebars": ">= 1.0.0"
   },
   "homepage": "https://github.com/components/ember",
@@ -13,10 +13,9 @@
   "_resolution": {
     "type": "version",
     "tag": "1.3.1",
-    "commit": "291ac53659ac21099f1d9e6eb9776cfe9dd690bb"
+    "commit": "5bb2e4196703aaa04028a96b5f0f17469bc091e2"
   },
   "_source": "git://github.com/components/ember.git",
   "_target": "~1.3.1",
-  "_originalSource": "ember",
-  "_direct": true
+  "_originalSource": "ember"
 }
