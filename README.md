@@ -9,8 +9,6 @@ See http://oskarrough.github.io/rough-ember/ for a more or less working example.
 ## To-do
 
 - Add a way to define meta <title> (See https://gist.github.com/machty/8413411)
-- Refactor main.js
-- Use ember-app-kit or similar to split the scripts into seperate files
 - Find a proper restful server
 - Find a way to render for SEO
 
@@ -34,4 +32,16 @@ See http://oskarrough.github.io/rough-ember/ for a more or less working example.
 - `templates`
 - `index.html`
 
-### Script and Ember structure
+## Getting started
+
+The app will run if you run it directly from /app/index.html - but it wont compile your templates nor compile your Sass etc. This is where a build system comes into play. Two popular systems are grunt and gulp. Here I went with gulp.
+
+You need to install the gulp cli globally first:
+
+`$ npm install -g gulp`
+
+Then you need to install the dependencies this 'rough ember' has:
+
+`$ npm install && bower install`
+
+Now you can use the build system. Read through Gulpfile.js to see what's possible. If you write `$ gulp` it will start a server while watching and compiling your files as necessary.
