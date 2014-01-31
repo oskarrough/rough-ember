@@ -4,7 +4,6 @@
 }
 body {
 	margin: 2rem;
-	// background-color: green;
 }
 h1,h2,h3,p,ul {
 	margin: 0 0 1rem;
@@ -29,20 +28,19 @@ nav {
 	}
 }
 
+
 /* For debugging */
-.Template {
-	margin: 2rem 0 0.5rem;
-	font-family: monospace;
-	color: #888;
-}
 .Area {
-	border: 1px solid;
-	margin: 1em;
+	border: 2px solid;
+	margin: 0 0 1em;
 	padding: 1em;
 }
-.modalshouldbehere {
-	@extend .Area;
-	border-color: red;
+.Area--outlet {
+	border-color: red !important;
+}
+.Area-name {
+	font-family: monospace;
+	color: #888;
 }
 
 
