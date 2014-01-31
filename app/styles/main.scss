@@ -54,15 +54,15 @@ nav {
 	/* indicate that you can click the overlay to close */
 	cursor: -webkit-zoom-out; cursor: -moz-zoom-out;
 	border: 1rem solid transparent;
-	transition: all 250ms;
+	transition: background-color 250ms, border 250ms;
+	pointer-events: none;
 }
 .Overlay.is-active {
 	background-color: rgba(50,50,75,0.7);
 	border: 1rem solid rgba(0,0,0,0.1);
-	transition: background-color 150ms;
+	transition: background-color 100ms;
+	pointer-events: initial;
 }
-
-
 /* Modal inside an overlay */
 .Modal {
 	position: relative;

@@ -4,6 +4,9 @@ App.ApplicationController = Ember.Controller.extend({
 	actions: {
 		toggleNavigation: function(){
 			this.toggleProperty('showNavigation');
+		},
+		nothing: function(){
+			// fake event to avoid bubbling from overlay to modal
 		}
 	}
 });
@@ -31,17 +34,7 @@ App.PostController = Ember.ObjectController.extend({
 	actions: {
 		// Capture the close action from the controller's template
 		close: function() {
-			// and send it to the ApplicationRoute
 			console.log('close?!');
-			return this.send('closeModal');
-		}
-	}
-});
-
-App.ModalController = Ember.ObjectController.extend({
-	actions: {
-		// Capture the close action from the controller's template
-		close: function() {
 			// and send it to the ApplicationRoute
 			return this.send('closeModal');
 		}

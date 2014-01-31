@@ -17,46 +17,32 @@ App.ApplicationRoute = Ember.Route.extend({
 			return true;
 		},
 
-		openModal: function(templateName, modelName) {
-			console.log('ApplicationRoute openModal' + templateName);
-			var self = this;
-			this.controllerFor(templateName).set('model', modelName);
+		openModal: function() {
+			console.log('openModal');
 
-			// Close on 'esc'
-			$(document).on('keyup', function(event) {
-				if (event.which === 27) {
-					return self.closeModal();
-				}
-			});
+			// Start animation in
+			$('.Overlay').addClass('is-active');
 
-			// // Render into the right outlet
-			// return this.render(templateName, {
-			// 	into: 'application',
-			// 	outlet: 'modal'
+			// // Close on 'esc'
+			// $(document).on('keyup', function(event) {
+			// 	if (event.which === 27) {
+			// 		return self.closeModal();
+			// 	}
 			// });
 		},
 
 		closeModal: function() {
-			console.log('ApplicationRoute closeModal');
 			var self = this;
+			console.log('closeModal');
 
-			// Stop listening to 'esc' because we just closed the modal
-			$(document).off('keyup');
+			// Start animating out
+			$('.Overlay').removeClass('is-active');
 
 			// use one of: transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd
 			// events so the handler is only fired once in your browser
-			$('.Overlay').removeClass('is-active');
-
 			// $('.Modal').one('transitionend', function(event) {
-
 				// Redirect back to /posts before…
-				self.transitionTo('posts');
-
-				// …we remove the model from the DOM
-				return self.disconnectOutlet({
-					outlet: 'modal',
-					parentView: 'application'
-				});
+				this.transitionTo('posts');
 			// });
 		}
 	}
@@ -105,24 +91,18 @@ App.PostRoute = Ember.Route.extend({
 	model: function(params) {
 		return this.store.find('post', params.post_id);
 	},
-	// (part duplicate of the openModel() in ApplicationRoute)
 	renderTemplate: function() {
-		var self = this;
 
-		console.log('post render template');
-
-		// // Close on 'esc' (also duplicate code)
-		// $(document).on('keyup', function(event) {
-		// 	if (event.which === 27) {
-		// 		return self.send('closeModal');
-		// 	}
-		// });
-
-		// Render using the post template into the modal of the application tpl
+		// Don't use the default outlet.
+		// Render using the same 'post' template but into the outlet called 'modal' of the application route
 		this.render('post', {
 			into: 'application',
 			outlet: 'modal'
 		});
+
+		// Fire this event from app route
+		return this.send('openModal');
+
 	},
 	afterModel: function(model) {
 		var pageTitle = model.get('title');

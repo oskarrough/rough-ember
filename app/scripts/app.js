@@ -12,31 +12,6 @@ App.Store = DS.Store.extend({
 	})
 });
 
-App.ModalDialogComponentView = Ember.View.extend({
-	templateName: 'components/modal-dialog',
-});
-	// Our Modal component
-App.ModalDialogComponent = Ember.Component.extend({
-	// templateName: 'components/modal-dialog',
-	actions: {
-		close: function() {
-			console.log('ModalDialogComponent.actions.close');
-			// pass the action on the controller
-			return this.sendAction();
-		}
-	},
-	// Hook for the 'rendered state'
-	didInsertElement: function() {
-		// Run our function 'next' which we need for our CSS transition to work
-		// it needs it's class later
-		Ember.run.next(this, this.animateModalOpen);
-	},
-	// Hook for a 'later rendered state'
-	animateModalOpen: function() {
-		this.$('.Overlay').addClass('is-active');
-	}
-});
-
 // Helper to convert Markdown to HTML
 var showdown = new Showdown.converter();
 Ember.Handlebars.helper('format-markdown', function(input) {

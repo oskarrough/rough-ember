@@ -15,6 +15,12 @@
 
 	<div class="Area Area--outlet">
 		<p class="Area-name">[outlet modal of application]</p>
-		{{outlet modal}}
+
+		<div class="Overlay" {{action 'closeModal'}}>
+			<div class="Modal" {{action 'nothing' bubbles=false}}>
+				{{outlet modal}}
+			</div>
+		</div>
+
 	</div>
 </div>

@@ -53,9 +53,15 @@ function program1(depth0,data) {
   data.buffer.push("\n	</nav>\n\n	<div class=\"Area Area--outlet\">\n		<p class=\"Area-name\">[outlet of application]</p>\n		");
   stack1 = helpers._triageMustache.call(depth0, "outlet", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
   if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
-  data.buffer.push("\n	</div>\n\n	<div class=\"Area Area--outlet\">\n		<p class=\"Area-name\">[outlet modal of application]</p>\n		");
+  data.buffer.push("\n	</div>\n\n	<div class=\"Area Area--outlet\">\n		<p class=\"Area-name\">[outlet modal of application]</p>\n\n		<div class=\"Overlay\" ");
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "closeModal", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data})));
+  data.buffer.push(">\n			<div class=\"Modal\" ");
+  data.buffer.push(escapeExpression(helpers.action.call(depth0, "nothing", {hash:{
+    'bubbles': (false)
+  },hashTypes:{'bubbles': "BOOLEAN"},hashContexts:{'bubbles': depth0},contexts:[depth0],types:["STRING"],data:data})));
+  data.buffer.push(">\n				");
   data.buffer.push(escapeExpression((helper = helpers.outlet || (depth0 && depth0.outlet),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data},helper ? helper.call(depth0, "modal", options) : helperMissing.call(depth0, "outlet", "modal", options))));
-  data.buffer.push("\n	</div>\n</div>\n");
+  data.buffer.push("\n			</div>\n		</div>\n\n	</div>\n</div>\n");
   return buffer;
   
 });
@@ -111,13 +117,14 @@ function program1(depth0,data) {
 Ember.TEMPLATES["page"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
 this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
-  var buffer = '', escapeExpression=this.escapeExpression;
+  var buffer = '', stack1, helper, options, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
 
 
   data.buffer.push("<div class=\"Area\">\n	<p class=\"Area-name\">[page]</p>\n	<h1>");
-  data.buffer.push(escapeExpression(helpers.unbound.call(depth0, "title", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data})));
+  stack1 = helpers._triageMustache.call(depth0, "title", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+  if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
   data.buffer.push("</h1>\n	<div class=\"Body\">");
-  data.buffer.push(escapeExpression(helpers.unbound.call(depth0, "format-markdown", "body", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0,depth0],types:["ID","ID"],data:data})));
+  data.buffer.push(escapeExpression((helper = helpers['format-markdown'] || (depth0 && depth0['format-markdown']),options={hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data},helper ? helper.call(depth0, "body", options) : helperMissing.call(depth0, "format-markdown", "body", options))));
   data.buffer.push("</div>\n</div>\n");
   return buffer;
   
