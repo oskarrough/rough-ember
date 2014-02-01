@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
 	<meta charset="utf-8">
@@ -7,7 +7,6 @@
 	<link rel="stylesheet" href="bower_components/normalize-css/normalize.css">
 	<link rel="stylesheet" href="styles/main.css">
 	<link rel="stylesheet" href="../dist/styles/main.css">
-	<!-- <link rel="stylesheet" href="styles/test.css"> -->
 </head>
 <body>
 
@@ -20,11 +19,11 @@
 	<script src="bower_components/ember-data/ember-data.js"></script>
 	<script src="bower_components/showdown/src/showdown.js"></script>
 
-	<!-- Our application scripts
-		 Your build system needs to precompile templatess into this one.
-		 Unless you want one  billion templates in your index.html  -->
-	<script src="scripts/templates.js"></script>
+	<!-- Our application scripts -->
 	<script src="scripts/app.js"></script>
+	<script src="scripts/helpers.js"></script>
+	<!-- The templates.js is created by our build system: Gulp. It puts all handlebars templates from /app/templates into one single file in a format that Ember understands -->
+	<script src="scripts/templates.js"></script>
 	<script src="scripts/router.js"></script>
 	<script src="scripts/controller.js"></script>
 	<script src="scripts/model.js"></script>

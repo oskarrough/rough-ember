@@ -45,3 +45,5 @@ Then you need to install the dependencies this 'rough ember' has:
 `$ npm install && bower install`
 
 Now you can use the build system. Read through Gulpfile.js to see what's possible. If you write `$ gulp` it will start a server while watching and compiling your files as necessary.
+
+If things don't look right, try `$ gulp compile` and refresh.

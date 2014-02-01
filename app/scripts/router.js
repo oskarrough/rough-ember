@@ -25,9 +25,9 @@ App.ApplicationRoute = Ember.Route.extend({
 
 			// // Close on 'esc'
 			// $(document).on('keyup', function(event) {
-			// 	if (event.which === 27) {
-			// 		return self.closeModal();
-			// 	}
+			// if (event.which === 27) {
+			//	return self.closeModal();
+			// }
 			// });
 		},
 
