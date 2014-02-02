@@ -1,19 +1,32 @@
-// Make an instance of Ember.Application and assign it to a global variable
+// Bootstrap and start an Ember application with the namespace "App"
 App = Ember.Application.create({
+
+	// For debugging let's log our route transitions to the console
 	LOG_TRANSITIONS: true
 });
 
-// Define the 'Store' which is the ember-data way. The store will be using
-// the 'FixtureAdapter' that simulates a real JSON API but works with a local object
+// The 'Store' manages the data our app will use. We use ember-data to do this.
+// The store uses an 'adapter' to know how to handle different data formats
+// In our case we will be using so called fixture data which is really just local json
 App.Store = DS.Store.extend({
-	adapter: DS.FixtureAdapter.create({
-		simulateRemoteResponse: true,
-		latency: 200
+	revision: 13,
+	//adapter: DS.FixtureAdapter
+	adapter: DS.FixtureAdapter.extend({
+		queryFixtures: function(fixtures, query, type) {
+			return fixtures;
+		}
 	})
 });
 
-// Helper to convert Markdown to HTML
-var showdown = new Showdown.converter();
-Ember.Handlebars.helper('format-markdown', function(input) {
-	return new Handlebars.SafeString(showdown.makeHtml(input));
-});
+// DS.FixtureAdapter.reopen({
+// 	queryFixtures: function(records, query, type) {
+// 		return records.filter(function(record) {
+// 			for(var key in query) {
+// 				if (!query.hasOwnProperty(key)) { continue; }
+// 				var value = query[key];
+// 				if (record[key] !== value) { return false; }
+// 			}
+// 			return true;
+// 		});
+// 	}
+// });
