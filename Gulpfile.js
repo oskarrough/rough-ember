@@ -9,8 +9,8 @@ var gulp = require('gulp'),
 	connect = require('connect'),
 	http = require('http'),
 	open = require('open'),
-	tinylr = require('tiny-lr'),
-	lr = tinylr();
+	lr = require('tiny-lr'),
+	server = lr();
 
 // I want to open the server in my browser automatically
 plugins.util.env.open = true;
@@ -28,31 +28,20 @@ gulp.task('jshint', function() {
 		.pipe(plugins.jshint.reporter('jshint-stylish'));
 });
 
-//
+// HTML
 gulp.task('html', function() {
 	return gulp.src('app/*.html')
-		.pipe(gulp.dest('dist'))
-		.pipe(plugins.livereload(lr));
+		.pipe(plugins.livereload(server))
+		.pipe(gulp.dest('dist'));
 });
 
+// Ember handlebars templates
 gulp.task('templates', function() {
 	return gulp.src(['app/templates/**/*.hbs'])
-		// convert handlebars to html in a type Ember knows
-		.pipe(plugins.emberHandlebars({ outputType: 'browser' }))
-		// put them all into this one file
-		.pipe(plugins.concat('templates.js'))
-		.pipe(gulp.dest('dist/scripts/'))
-		.pipe(plugins.livereload(lr));
-});
-
-// Minify our scripts
-gulp.task('scripts', function() {
-	return gulp.src('app/scripts/**/*.js')
-		//.pipe(plugins.concat('all.js'))
-		//.pipe(plugins.uglify()) // Uglify does minify
-		//.pipe(plugins.rename({suffix: '.min'}))
-		.pipe(gulp.dest('dist/scripts/'))
-		.pipe(plugins.livereload(lr));
+		.pipe(plugins.emberHandlebars({outputType: 'browser'})) // convert to a type Ember knows
+		.pipe(plugins.concat('templates.js')) // put them all into this one file
+		.pipe(plugins.livereload(server))
+		.pipe(gulp.dest('dist/scripts/'));
 });
 
 // Minify and copy styles
@@ -63,34 +52,45 @@ gulp.task('styles', function() {
 		.pipe(plugins.autoprefixer('last 2 versions', '> 5%', 'ios 6'))
 		.pipe(plugins.csso()) // minifies
 		.pipe(gulp.dest('dist/styles'))
-		.pipe(plugins.livereload(lr));
+		.pipe(plugins.livereload(server));
 });
+
+// Minify our scripts
+gulp.task('scripts', function() {
+	return gulp.src('app/scripts/**/*.js')
+		//.pipe(plugins.concat('all.js'))
+		//.pipe(plugins.uglify()) // Uglify does minify
+		//.pipe(plugins.rename({suffix: '.min'}))
+		.pipe(plugins.livereload(server))
+		.pipe(gulp.dest('dist/scripts/'));
+});
+
 
 // Copy things not covered by other tasks
 gulp.task('copy', function() {
 	gulp.src('app/bower_components/**')
 		.pipe(gulp.dest('dist/bower_components'))
-		.pipe(plugins.livereload(lr));
+		.pipe(plugins.livereload(server));
 	gulp.src('app/data/**')
 		.pipe(gulp.dest('dist/data'))
-		.pipe(plugins.livereload(lr));
+		.pipe(plugins.livereload(server));
 });
 
 // First clean, then build
 gulp.task('build', ['clean'], function() {
-	gulp.start('html', 'templates', 'scripts', 'styles', 'copy');
+	gulp.start('html', 'templates', 'styles', 'scripts', 'copy');
 });
 
-// @todo what is this exactly?
+// Listen for livereloadgulp.task('listen', function(next) {
 gulp.task('listen', function(next) {
-	lr.listen(35729, function(err) {
+	server.listen(35729, function(err) {
 		if (err) return console.error(err);
 		next();
 	});
 });
 
 //Use gulp's watch method to monitor file changes and then run tasks
-gulp.task('watch', function() {
+gulp.task('watch', ['listen'], function() {
 	gulp.watch('app/*.html', ['html']);
 	gulp.watch('app/templates/**/*', ['templates']);
 	gulp.watch('app/scripts/**/*', ['scripts']);
@@ -106,7 +106,7 @@ gulp.task('default', ['build'], function() {
 
 // Starts our tiny-lr (livereload) server, start watching for file changes, then start the server and open it on your browser
 // inspired by http://blog.overzealous.com/post/74121048393/why-you-shouldnt-create-a-gulp-plugin-or-how-to-stop
-gulp.task('server', ['listen', 'watch'], function(callback) {
+gulp.task('server', ['watch'], function(callback) {
 	var devApp, devServer, devAddress, devHost, url, log=plugins.util.log, colors=plugins.util.colors;
 
 	devApp = connect()

@@ -9,7 +9,7 @@ $maroon: #85144B;
 }
 body {
 	margin: 1rem;
-	background-color: #fafafa;
+	background-color: red;
 }
 h1,h2,h3,p,ul {
 	margin: 0 0 1rem;
@@ -67,13 +67,11 @@ nav {
 	left: 0;
 	/* indicate that you can click the overlay to close */
 	cursor: -webkit-zoom-out; cursor: -moz-zoom-out;
-	border: 1rem solid transparent;
-	transition: background-color 250ms, border 250ms;
+	transition: background-color 250ms;
 	pointer-events: none;
 }
 .Overlay.is-active {
 	background-color: rgba(50,50,75,0.7);
-	border: 1rem solid rgba(0,0,0,0.1);
 	transition: background-color 100ms;
 	pointer-events: initial;
 }
@@ -88,7 +86,6 @@ nav {
 	background-color: #fff;
 	cursor: initial;
 	border: 2px solid;
-
 	/* initial 'inactive' state */
 	opacity: 0;
 	transform: translate3d(0,-0.5rem,0) scale(0.99);
@@ -147,6 +144,7 @@ button[disabled] {
 		display: block;
 		height: 100%;
 		min-height: 3em;
+		line-height: 3em;
 	}
 }
 .is-featured {
