@@ -71,7 +71,7 @@ gulp.task('styles', function() {
 		// .pipe(plugins.watch())
 		.pipe(plugins.sass())
 		.pipe(plugins.autoprefixer('last 2 versions', '> 5%', 'ios 6'))
-		//.pipe(plugins.minifyCss())
+		.pipe(plugins.csso()) // minifies
 		.pipe(gulp.dest(config.dist + '/styles'))
 		.pipe(plugins.livereload(lr));
 });
@@ -114,6 +114,8 @@ gulp.task('default', ['build'], function() {
 	gulp.start('server');
 });
 
+// Starts our tiny-lr (livereload) server, start watching for file changes, then start the server and open it on your browser
+// inspired by http://blog.overzealous.com/post/74121048393/why-you-shouldnt-create-a-gulp-plugin-or-how-to-stop
 gulp.task('server', ['listen', 'watch'], function(callback) {
 	var devApp, devServer, devAddress, devHost, url, log=plugins.util.log, colors=plugins.util.colors;
 
@@ -146,5 +148,3 @@ gulp.task('server', ['listen', 'watch'], function(callback) {
 		callback(); // we're done with this task for now
 	});
 });
-
-
