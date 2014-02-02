@@ -1,9 +1,15 @@
+$red: #FF4136;
+$green: #2ECC40;
+$blue: #0074D9;
+$orange: #FF851B;
+$maroon: #85144B;
 /* Base */
 * {
 	box-sizing: border-box;
 }
 body {
 	margin: 2rem;
+	background-color: #fafafa;
 }
 h1,h2,h3,p,ul {
 	margin: 0 0 1rem;
@@ -11,18 +17,24 @@ h1,h2,h3,p,ul {
 
 
 /* Navigation */
-a,
-a:visited {
-	color: blue;
-}
-a.active {
-	color: green;
+a {
+	color: $blue;
+	&:visited {
+		color: $blue;
+	}
+	&:hover {
+		color: $orange;
+	}
+	&.active {
+		color: $red;
+	}
 }
 nav {
 	display: none;
 	a {
-	margin-right: 0.5rem;
+		margin-right: 0.5rem;
 	}
+
 	&.is-active {
 		display: block;
 	}
@@ -36,7 +48,7 @@ nav {
 	padding: 1em;
 }
 .Area--outlet {
-	border-color: red !important;
+	border-color: $red !important;
 }
 .Area-name {
 	font-family: monospace;
