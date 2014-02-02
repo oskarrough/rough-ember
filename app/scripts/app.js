@@ -1,6 +1,7 @@
-// Make an instance of Ember.Application and assign it to a global variable
+// Bootstrap and start an Ember application with the namespace "App"
 App = Ember.Application.create({
-	// Log route transitions for debugging
+
+	// For debugging let's log our route transitions to the console
 	LOG_TRANSITIONS: true
 });
 
@@ -8,8 +9,6 @@ App = Ember.Application.create({
 // The store uses an 'adapter' to know how to handle different data formats
 // In our case we will be using so called fixture data which is really just local json
 App.Store = DS.Store.extend({
-	adapter: DS.FixtureAdapter.create({
-		simulateRemoteResponse: true,
-		latency: 200
-	})
+	revision: 13,
+	adapter: DS.FixtureAdapter
 });
