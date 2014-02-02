@@ -12,6 +12,10 @@ See http://oskarrough.github.io/rough-ember/ for a more or less working example.
 - Find a proper restful server
 - Find a way to render for SEO
 
+## Livereload
+
+Remember to active the Livereload browser plugin.
+
 ## Structure
 
 ### Root level
