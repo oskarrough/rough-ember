@@ -12,7 +12,7 @@
 	<ul {{bind-attr class=":Posts viewingGrid:Posts--grid viewingList:Posts--list"}}>
 		{{#each}}
 			<li {{bind-attr class=":Post isFeatured:is-featured"}}>
-				{{#link-to 'post' this}}{{unbound title}}{{/link-to}}
+				{{#link-to 'post' this}}{{title}}{{/link-to}}
 			</li>
 		{{/each}}
 	</ul>
