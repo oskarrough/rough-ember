@@ -10,79 +10,69 @@ var gulp = require('gulp'),
 	http = require('http'),
 	open = require('open'),
 	tinylr = require('tiny-lr'),
-	lr = tinylr(),
-
-	config = {
-		app: 'app',
-		dist: 'dist'
-	};
+	lr = tinylr();
 
 // I want to open the server in my browser automatically
 plugins.util.env.open = true;
 
 // Clean (delete) our /dist folder
+// read: false makes it faster by not reading the contents of the files before deleting
 gulp.task('clean', function() {
-	return gulp.src([config.dist], {
-		read: false // Speed it op by not reading file contents
-	}).pipe(plugins.clean());
+	return gulp.src('dist', {read: false}).pipe(plugins.clean());
 });
 
 // Lint our scripts with jshint(s)
 gulp.task('jshint', function() {
-	return gulp.src([config.app + '/scripts/**/*.js'])
+	return gulp.src(['app/scripts/**/*.js'])
 		.pipe(plugins.jshint())
 		.pipe(plugins.jshint.reporter('jshint-stylish'));
 });
 
-// Mo
+//
 gulp.task('html', function() {
-	return gulp.src(config.app + '/*.html')
-		// .pipe(plugins.watch())
-		.pipe(gulp.dest(config.dist))
+	return gulp.src('app/*.html')
+		.pipe(gulp.dest('dist'))
 		.pipe(plugins.livereload(lr));
 });
 
 gulp.task('templates', function() {
-	return gulp.src([config.app + '/templates/**/*.hbs'])
-		// .pipe(plugins.watch())
+	return gulp.src(['app/templates/**/*.hbs'])
 		// convert handlebars to html in a type Ember knows
 		.pipe(plugins.emberHandlebars({ outputType: 'browser' }))
 		// put them all into this one file
 		.pipe(plugins.concat('templates.js'))
-		.pipe(gulp.dest(config.dist + '/scripts/'))
+		.pipe(gulp.dest('dist/scripts/'))
 		.pipe(plugins.livereload(lr));
 });
 
 // Minify our scripts
 gulp.task('scripts', function() {
-	return gulp.src(config.app + '/scripts/**/*.js')
-		// .pipe(plugins.watch())
+	return gulp.src('app/scripts/**/*.js')
 		//.pipe(plugins.concat('all.js'))
 		//.pipe(plugins.uglify()) // Uglify does minify
 		//.pipe(plugins.rename({suffix: '.min'}))
-		.pipe(gulp.dest(config.dist + '/scripts/'))
+		.pipe(gulp.dest('dist/scripts/'))
 		.pipe(plugins.livereload(lr));
 });
 
 // Minify and copy styles
 gulp.task('styles', function() {
 	// Process sass files
-	return gulp.src(config.app + '/styles/main.scss')
-		// .pipe(plugins.watch())
+	return gulp.src('app/styles/main.scss')
 		.pipe(plugins.sass())
 		.pipe(plugins.autoprefixer('last 2 versions', '> 5%', 'ios 6'))
 		.pipe(plugins.csso()) // minifies
-		.pipe(gulp.dest(config.dist + '/styles'))
+		.pipe(gulp.dest('dist/styles'))
 		.pipe(plugins.livereload(lr));
 });
 
 // Copy things not covered by other tasks
 gulp.task('copy', function() {
-	gulp.src(config.app + '/bower_components/**')
-		.pipe(gulp.dest(config.dist + '/bower_components'))
+	gulp.src('app/bower_components/**')
+		.pipe(gulp.dest('dist/bower_components'))
 		.pipe(plugins.livereload(lr));
-	gulp.src(config.app + '/data/**')
-		.pipe(gulp.dest(config.dist + '/data'))
+	gulp.src('app/data/**')
+		.pipe(gulp.dest('dist/data'))
 		.pipe(plugins.livereload(lr));
 });
 
@@ -101,11 +91,11 @@ gulp.task('listen', function(next) {
 
 //Use gulp's watch method to monitor file changes and then run tasks
 gulp.task('watch', function() {
-	gulp.watch(config.app + '/*.html', ['html']);
-	gulp.watch(config.app + '/templates/**/*', ['templates']);
-	gulp.watch(config.app + '/scripts/**/*', ['scripts']);
-	gulp.watch(config.app + '/styles/**/*', ['styles']);
-	gulp.watch(config.app + '/data/**/*', ['copy']);
+	gulp.watch('app/*.html', ['html']);
+	gulp.watch('app/templates/**/*', ['templates']);
+	gulp.watch('app/scripts/**/*', ['scripts']);
+	gulp.watch('app/styles/**/*', ['styles']);
+	gulp.watch('app/data/**/*', ['copy']);
 });
 
 
