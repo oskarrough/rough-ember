@@ -1,0 +1,17 @@
+<div class="Area">
+	<p class="Area-name">[pages]</p>
+
+	<ul>
+		{{#each}}
+			<li>
+				{{#link-to 'page' this}}{{title}}{{/link-to}}
+			</li>
+		{{/each}}
+	</ul>
+
+	<div class="Area Area--outlet">
+		<p class="Area-name">[outlet of pages]</p>
+		{{outlet}}
+		</div>
+	</div>
+</div>

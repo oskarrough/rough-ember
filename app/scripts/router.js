@@ -1,6 +1,8 @@
 // Define our routes (the URLs)
 App.Router.map(function() {
-	this.route('about');
+	this.resource('pages', function() {
+		this.resource('page', { path: ':page_slug'});
+	});
 	this.resource('posts', function() {
 		this.resource('post', { path: ':post_id'});
 	});
@@ -61,18 +63,28 @@ App.IndexRoute = Ember.Route.extend({
 	}
 });
 
-App.AboutRoute = Ember.Route.extend({
+App.PagesRoute = Ember.Route.extend({
 	model: function(params) {
-		return this.store.find('page', 2);
+		return this.store.find('page');
+	}
+});
+App.PageRoute = Ember.Route.extend({
+	model: function(params) {
+		// return this.store.findQuery({ slug: params.page_slug });
+		return App.Page.find({ slug: params.page_slug })
 	},
-	// Use the 'page' template instead of the default 'about'
-	renderTemplate: function() {
-		this.render('page');
+	setupController: function(controller, model) {
+		// If the model comes from a link-to helper it will be an object,
+		// if it comes from the route it will be an array of one element
+		if (Ember.isArray(model)){
+			controller.set('model', model.get('firstObject'));
+		} else{
+			controller.set('model', model);
+		}
 	},
-	afterModel: function(model) {
-		var pageTitle = model.get('title');
-		var siteTitle = this.controllerFor('Application').get('siteTitle');
-		document.title = pageTitle + ' - ' + siteTitle;
+	// allows us to use slug as the url
+	serialize: function(model, params) {
+		return { page_slug: model.get('slug')};
 	}
 });
 
@@ -110,3 +122,18 @@ App.PostRoute = Ember.Route.extend({
 		document.title = pageTitle + ' - ' + siteTitle;
 	}
 });
+
+// App.AboutRoute = Ember.Route.extend({
+// 	model: function(params) {
+// 		return this.store.find('page', 2);
+// 	},
+// 	// Use the 'page' template instead of the default 'about'
+// 	renderTemplate: function() {
+// 		this.render('page');
+// 	},
+// 	afterModel: function(model) {
+// 		var pageTitle = model.get('title');
+// 		var siteTitle = this.controllerFor('Application').get('siteTitle');
+// 		document.title = pageTitle + ' - ' + siteTitle;
+// 	}
+// });
