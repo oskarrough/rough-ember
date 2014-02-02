@@ -12,18 +12,23 @@
 
 	<h1>Rough Ember</h1>
 
-	<!-- Dependencies -->
+	<!-- Ember needs jquery and handlebars-->
 	<script src="bower_components/jquery/jquery.js"></script>
 	<script src="bower_components/handlebars/handlebars.js"></script>
-	<script src="bower_components/ember/ember.js"></script>
-	<script src="bower_components/ember-data/ember-data.js"></script>
+
+	<!-- Showdown can convert markdown to HMTL -->
 	<script src="bower_components/showdown/src/showdown.js"></script>
 
+	<!-- Ember is split into these two projects Ember Data takes care of the data -->
+	<script src="bower_components/ember/ember.js"></script>
+	<script src="bower_components/ember-data/ember-data.js"></script>
+
+
 	<!-- Our application scripts -->
-	<script src="scripts/app.js"></script>
-	<script src="scripts/helpers.js"></script>
 	<!-- The templates.js is created by our build system: Gulp. It puts all handlebars templates from /app/templates into one single file in a format that Ember understands -->
 	<script src="scripts/templates.js"></script>
+	<script src="scripts/app.js"></script>
+	<script src="scripts/helpers.js"></script>
 	<script src="scripts/router.js"></script>
 	<script src="scripts/controller.js"></script>
 	<script src="scripts/model.js"></script>
