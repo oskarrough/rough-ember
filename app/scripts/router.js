@@ -53,17 +53,7 @@ App.PagesRoute = Ember.Route.extend({
 
 App.PageRoute = Ember.Route.extend({
 	model: function(params) {
-		// return this.store.findQuery({ slug: params.page_slug });
-		return App.Page.find({ slug: params.page_slug })
-	},
-	setupController: function(controller, model) {
-		// If the model comes from a link-to helper it will be an object,
-		// if it comes from the route it will be an array of one element
-		if (Ember.isArray(model)){
-			controller.set('model', model.get('firstObject'));
-		} else{
-			controller.set('model', model);
-		}
+		return this.modelFor('pages').findBy('slug', params.page_slug); // find by a property
 	},
 	// allows us to use slug as the url
 	serialize: function(model, params) {
