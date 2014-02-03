@@ -1,6 +1,5 @@
 // Bootstrap and start an Ember application with the namespace "App"
 App = Ember.Application.create({
-
 	// For debugging let's log our route transitions to the console
 	LOG_TRANSITIONS: true
 });
