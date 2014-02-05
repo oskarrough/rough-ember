@@ -1,7 +1,9 @@
 {
   "name": "rough",
   "version": "0.1.0",
-  "dependencies": {},
+  "dependencies": {
+    "gulp": "~3.5.1"
+  },
   "devDependencies": {
     "gulp": "~3.5.0",
     "gulp-load-plugins": "~0.2.0",

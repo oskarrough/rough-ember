@@ -1,6 +1,6 @@
 App.ApplicationController = Ember.Controller.extend({
-	siteTitle: 'Rough Ember',
-	showNavigation: true,
+	title: 'Rough Ember', // this is available in application.hbs
+	showNavigation: true, // Whether to show the navigation or not
 	actions: {
 		toggleNavigation: function(){
 			this.toggleProperty('showNavigation');

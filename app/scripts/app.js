@@ -4,7 +4,5 @@ App = Ember.Application.create({
 	LOG_TRANSITIONS: true
 });
 
-// The 'Store' manages the data our app will use. We use ember-data to do this.
-// The store uses an 'adapter' to know how to handle different data formats
-// In our case we will be using so called fixture data which is really just local json
+// In order to use local data without a real backend, we are using this adapter
 App.ApplicationAdapter = DS.FixtureAdapter;
