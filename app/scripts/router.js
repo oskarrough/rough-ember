@@ -1,5 +1,8 @@
 // Define our routes (the URLs)
 App.Router.map(function() {
+	this.resource('home');
+	this.resource('work');
+	// this.resource('about');
 	this.resource('pages', function() {
 		this.resource('page', { path: ':page_slug'});
 	});
@@ -40,8 +43,39 @@ App.ApplicationRoute = Ember.Route.extend({
 });
 
 App.IndexRoute = Ember.Route.extend({
-	model: function(params) {
-		return this.store.find('page', 1); // find page by id
+	beforeModel: function(params) {
+		this.transitionTo('home');
+	}
+});
+
+App.HomeRoute = Ember.Route.extend({
+	model: function() {
+		return Ember.RSVP.hash({
+			home: this.store.find('page', 1),
+			work: this.store.find('page', 2),
+			about: this.store.find('page', 3)
+		});
+	}
+});
+
+App.WorkRoute = Ember.Route.extend({
+	beforeModel: function(params) {
+		this.transitionTo('home');
+		// scroll to work
+	}
+});
+
+App.AboutRoute = Ember.Route.extend({
+	beforeModel: function(params) {
+		this.transitionTo('home');
+		// scroll to about
+	}
+});
+
+App.ContactRoute = Ember.Route.extend({
+	beforeModel: function(params) {
+		this.transitionTo('home');
+		// scroll to contact
 	}
 });
 
