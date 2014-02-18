@@ -2,12 +2,18 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<meta name='viewport' content='width=device-width'>
+	<meta name="viewport" content="width=device-width">
 	<title>Rough Ember</title>
+	<!-- build:css styles/vendor.css -->
 	<link rel="stylesheet" href="bower_components/normalize-css/normalize.css">
+	<!-- endbuild -->
+	<!-- build:css styles/main.css -->
 	<link rel="stylesheet" href="styles/main.css">
+	<!-- endbuild -->
 </head>
 <body>
+
+	<!-- build:js scripts/main.js -->
 
 	<!-- Ember needs jquery and handlebars-->
 	<script src="bower_components/jquery/jquery.js"></script>
@@ -20,22 +26,13 @@
 	<script src="bower_components/ember/ember.js"></script>
 	<script src="bower_components/ember-data/ember-data.js"></script>
 
-	<!-- Our application scripts -->
 	<!-- The templates.js is created by our build system: Gulp. It puts all handlebars templates from /app/templates into one single file in a format that Ember understands -->
 	<script src="scripts/templates.js"></script>
 
-	<script src="scripts/app.js"></script>
-	<script src="scripts/helpers.js"></script>
-
-	<script src="scripts/router.js"></script>
-
-	<script src="scripts/controller.js"></script>
-
-	<script src="scripts/model.js"></script>
-
-	<!-- Fixture data -->
+	<!-- The content for our app -->
 	<script src="data/page.js"></script>
 	<script src="data/post.js"></script>
+	<!-- endbuild -->
 
 </body>
 </html>

@@ -1,8 +1,8 @@
 // Define our routes (the URLs)
 App.Router.map(function() {
-	this.resource('home');
+	this.resource('home', { queryParams: 'anchor'});
 	this.resource('work');
-	// this.resource('about');
+	this.resource('about');
 	this.resource('pages', function() {
 		this.resource('page', { path: ':page_slug'});
 	});
@@ -56,6 +56,10 @@ App.HomeRoute = Ember.Route.extend({
 			about: this.store.find('page', 3)
 		});
 	}
+	// ,
+	// setupController: function(controller, context, queryParams) {
+	// 	controller.set('anchorLocation', queryParams.anchor);
+	// }
 });
 
 App.WorkRoute = Ember.Route.extend({
@@ -67,6 +71,7 @@ App.WorkRoute = Ember.Route.extend({
 
 App.AboutRoute = Ember.Route.extend({
 	beforeModel: function(params) {
+		console.log('here');
 		this.transitionTo('home');
 		// scroll to about
 	}

@@ -1,24 +1,14 @@
 // Before using, we have to require gulp itself
-var gulp = require('gulp'),
+var gulp = require('gulp');
 
-	// Automatically require all dependencies listed in package.json that start with "gulp-"
-	// Example: gulp-minify-css turns into plugins.minifyCss()
-	plugins = require('gulp-load-plugins')({ camelize: true }),
+// Automatically require all dependencies listed in package.json that start with "gulp-"
+// Example: gulp-minify-css turns into plugins.minifyCss()
+var plugins = require('gulp-load-plugins')();
 
-	// Require extra (non-gulp) plugins needed for livereload
-	connect = require('connect'),
-	http = require('http'),
-	open = require('open'),
-	lr = require('tiny-lr'),
-	server = lr();
-
-// I want to open the server in my browser automatically
-plugins.util.env.open = true;
-
-// Clean (delete) our /dist folder
-// read: false makes it faster by not reading the contents of the files before deleting
-gulp.task('clean', function() {
-	return gulp.src('dist', {read: false}).pipe(plugins.clean());
+// Clean
+gulp.task('clean', function () {
+    return gulp.src(['dist'], {read: false})
+    	.pipe(plugins.clean());
 });
 
 // Lint our scripts with jshint(s)
@@ -31,110 +21,88 @@ gulp.task('jshint', function() {
 // HTML
 gulp.task('html', function() {
 	return gulp.src('app/*.html')
-		.pipe(plugins.livereload(server))
+		.pipe(plugins.useref()) // useref finds and replaces HTML build blocks
 		.pipe(gulp.dest('dist'));
 });
 
-// Ember handlebars templates
+// Handlebars templates
 gulp.task('templates', function() {
 	return gulp.src(['app/templates/**/*.hbs'])
-		.pipe(plugins.emberHandlebars({outputType: 'browser'})) // convert to a type Ember knows
-		.pipe(plugins.concat('templates.js')) // put them all into this one file
-		.pipe(plugins.livereload(server))
-		.pipe(gulp.dest('dist/scripts/'));
+		.pipe(plugins.handlebars())
+		.pipe(plugins.declare({
+			namespace: 'Ember.TEMPLATES' // convert to a type Ember knows
+		}))
+		.pipe(plugins.concat('templates.js'))// put them all into this one file
+		.pipe(gulp.dest('dist/scripts'));
 });
 
-// Minify and copy styles
+// Styles
 gulp.task('styles', function() {
-	// Process sass files
 	return gulp.src('app/styles/main.scss')
 		.pipe(plugins.sass())
-		.pipe(plugins.autoprefixer('last 2 versions', '> 5%', 'ios 6'))
-		.pipe(plugins.csso()) // minifies
-		.pipe(gulp.dest('dist/styles'))
-		.pipe(plugins.livereload(server));
+		// .pipe(plugins.rubySass({
+		// 	style: 'expanded',
+		// 	loadPath: ['app/bower_components']
+		// }))
+		.pipe(plugins.autoprefixer('last 2 versions'))
+		.pipe(gulp.dest('dist/styles'));
 });
 
-// Minify our scripts
+// Scripts
 gulp.task('scripts', function() {
 	return gulp.src('app/scripts/**/*.js')
-		//.pipe(plugins.concat('all.js'))
 		//.pipe(plugins.uglify()) // Uglify does minify
 		//.pipe(plugins.rename({suffix: '.min'}))
-		.pipe(plugins.livereload(server))
-		.pipe(gulp.dest('dist/scripts/'));
+		.pipe(gulp.dest('dist/scripts'));
 });
-
 
 // Copy things not covered by other tasks
 gulp.task('copy', function() {
 	gulp.src('app/bower_components/**')
-		.pipe(gulp.dest('dist/bower_components'))
-		.pipe(plugins.livereload(server));
+		.pipe(gulp.dest('dist/bower_components'));
 	gulp.src('app/data/**')
-		.pipe(gulp.dest('dist/data'))
-		.pipe(plugins.livereload(server));
+		.pipe(gulp.dest('dist/data'));
 });
 
-// First clean, then build
-gulp.task('build', ['clean'], function() {
-	gulp.start('html', 'templates', 'styles', 'scripts', 'copy');
+// Bundle
+gulp.task('bundle', ['styles', 'scripts'], plugins.bundle('./app/*.html', {
+    appDir: 'app',
+    buildDir: 'dist',
+    minify: false
+}));
+
+// Build
+gulp.task('build', ['html', 'templates', 'bundle']);
+
+// Default task
+gulp.task('default', ['clean'], function() {
+	gulp.start('build');
 });
 
-// Listen for livereloadgulp.task('listen', function(next) {
-gulp.task('listen', function(next) {
-	server.listen(35729, function(err) {
-		if (err) return console.error(err);
-		next();
-	});
-});
+// Connect
+gulp.task('connect', plugins.connect.server({
+    // root: __dirname + '/app',
+    root: ['app', 'dist'],
+    port: 9000,
+    livereload: true
+}));
 
-//Use gulp's watch method to monitor file changes and then run tasks
-gulp.task('watch', ['listen'], function() {
-	gulp.watch('app/*.html', ['html']);
-	gulp.watch('app/templates/**/*', ['templates']);
-	gulp.watch('app/scripts/**/*', ['scripts']);
-	gulp.watch('app/styles/**/*', ['styles']);
-	gulp.watch('app/data/**/*', ['copy']);
-});
+// Watch
+gulp.task('watch', ['connect'], function () {
 
+    // Watch for changes in `app` folder and refresh the browser
+    gulp.watch([
+        'app/*.html',
+        'app/templates/**/*.css',
+        'app/styles/**/*.css',
+        'app/scripts/**/*.js',
+        'app/images/**/*'
+    ], plugins.connect.reload);
 
-// This default task will build our app and start a server for developing
-gulp.task('default', ['build'], function() {
-	gulp.start('server');
-});
-
-// Starts our tiny-lr (livereload) server, start watching for file changes, then start the server and open it on your browser
-// inspired by http://blog.overzealous.com/post/74121048393/why-you-shouldnt-create-a-gulp-plugin-or-how-to-stop
-gulp.task('server', ['watch'], function(callback) {
-	var devApp, devServer, devAddress, devHost, url, log=plugins.util.log, colors=plugins.util.colors;
-
-	devApp = connect()
-		.use(connect.logger('dev'))
-		.use(connect.static('dist'));
-
-	// change port and hostname to something static if you prefer
-	devServer = http.createServer(devApp).listen(9000 /*, hostname*/);
-
-	devServer.on('error', function(error) {
-		log(colors.underline(colors.red('ERROR'))+' Unable to start server!');
-		callback(error); // we couldn't start the server, so report it and quit gulp
-	});
-
-	devServer.on('listening', function() {
-		devAddress = devServer.address();
-		devHost = devAddress.address === '0.0.0.0' ? 'localhost' : devAddress.address;
-		url = 'http://' + devHost + ':' + devAddress.port + '/index.html';
-
-		log('');
-		log('Started dev server at '+colors.magenta(url));
-		if (plugins.util.env.open) {
-			log('Opening dev server URL in browser');
-			open(url);
-		} else {
-			log(colors.gray('(Run with --open to automatically open URL on startup)'));
-		}
-		log('');
-		callback(); // we're done with this task for now
-	});
+    // Watch the same files and compile
+    gulp.watch('app/*.html', ['html']);
+    gulp.watch('app/templates/**/*', ['templates']);
+    gulp.watch('app/styles/**/*', ['styles']);
+    gulp.watch('app/scripts/**/*', ['scripts']);
+    gulp.watch('app/data/**/*', ['copy']);
 });

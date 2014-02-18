@@ -37,3 +37,12 @@ App.PostController = Ember.ObjectController.extend({
 		}
 	}
 });
+
+App.IndexController = Ember.ObjectController.extend({
+	showAnchor: (function() {
+		var $elem, $scrollTo;
+		console.log($elem);
+		// $elem = $(this.anchorLocation);
+		// return $scrollTo = $('body').scrollTop($elem.offset().top);
+	}).observes('anchorLocation')
+});

@@ -34,3 +34,7 @@ As of this writing they are working on the spec. See https://gist.github.com/mac
 ## How to query your database
 
 https://gist.github.com/machty/8167051
+
+## Measure how fast your views are
+
+https://github.com/eviltrout/ember-renderspeed
