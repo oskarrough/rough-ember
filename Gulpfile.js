@@ -28,9 +28,12 @@ gulp.task('html', function() {
 // Handlebars templates
 gulp.task('templates', function() {
 	return gulp.src(['app/templates/**/*.hbs'])
-		.pipe(plugins.handlebars())
-		.pipe(plugins.declare({
-			namespace: 'Ember.TEMPLATES' // convert to a type Ember knows
+		// .pipe(plugins.handlebars())
+		// .pipe(plugins.declare({
+		// 	namespace: 'App.TEMPLATES' // convert to a type Ember knows
+		// }))
+		.pipe(plugins.emberHandlebars({
+			outputType: 'browser'
 		}))
 		.pipe(plugins.concat('templates.js'))// put them all into this one file
 		.pipe(gulp.dest('dist/scripts'));
